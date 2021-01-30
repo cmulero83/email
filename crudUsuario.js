@@ -1,12 +1,9 @@
 const mysql = require('mysql')
 const bcrypt = require ('bcrypt')
 
-// Conexion base de datos 
+// Conectamos a la DB y defenimos los valores
 
 let conexion
-
-// Definir valores de conexion a la base de datos
-/////////////////////////////
 
 let HOST = '65.99.225.55'
 let database_name = 'mailshi1_alba'
@@ -14,56 +11,15 @@ let database_user = 'mailshi1_alba'
 let database_password = 'Suerte05alba'
 
 
-//CRUD
-
-
-// prueba de añadir a la BBDD
-function prueba_anadir(email, password, callback){
-
-    conexion = mysql.createConnection({
-        host: HOST,
-        database: database_name,
-        user: database_user,
-        password: database_password
-    })
-
-    conexion.connect(function(err){
-        if (!err){
-            sql = `INSERT INTO usuarios (email, password) VALUES ('${email}','${password}')`
-            conexion.query(sql, function(err, result){
-                console.log(result)
-                console.log('error : ' + err)
-                conexion.end() ////////-------
-                callback({"campo":"oldld"})
-            })
-
-        }else{
-            console.log('Error en la conexion')
-            conexion.end() /////_______ Cerrar la conexion....
-        }
-
-    })
-
-
-
-
-}
-
-// --- ALTA ---
+// ---   CRUD ALTA   ---
 
 /*
-    Ult. Actualizacon: 27 de Enero 2021
-    Descripcion: Esta funcion recibe por parametro el email y password, esta funcion va a crear un nuevo usuario en caso de que no exista.
+    Ult. Actualizacon: 30 de Enero 2021
+    Descripcion: Esta funcion recibe por parametro (email y password) esta funcion va a crear un nuevo usuario en caso de que no exista.
 
     funcion: alta_usuario
     parametros: email, password
-    devolucion: callback con un archivo JSON
-        {"success":true/false,
-            datos[{
-                "email":"xxxx",
-                "password":"xxxx"
-            }]
-        }
+    devolucion: callback({'success':'true/false', 'menssage':'xxx', 'email': `${email}`, 'password':`${hash}`})
 */
 
 function alta_usuario(email, password, callback){
@@ -75,276 +31,234 @@ function alta_usuario(email, password, callback){
         password: database_password
     })
 
-    //Encriptamos la contraseña
-    bcrypt.hash(password, 10, function(err, hash){
+    bcrypt.hash(password, 10, function(err, hash){          // Encriptamos el password
 
         if(!err){
-            conexion.connect(function(err){
+           
+            conexion.connect(function(err){         // Hacemos la conexion a la DB
+
                 if(!err){
-                    // Sentencia SQL 
-                    sql = `SELECT * FROM usuarios WHERE email = '${email}'`
-                    //Conectamos a la DB y ejecutamos la sentecia SQL
-                    conexion.query(sql, function(err, result){
 
-                        console.log(result.length);
+                    sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
+
+                    conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejecutamos nuestra sentecia SQL
+
                         if(result.length == 0){
-                        console.log('Usuario nuevo');
-                        // Crear el objeto JSON para devolucion
-                        objeto = {"success":'true', 'datos':[]};
-                        objeto.datos.push({
-                        "email":`${email}`
-                    })
-                    callback(objeto)
-                    //Insertamos un  nuevo usuaio
-                    sql = `INSERT INTO usuarios (email, password) VALUES ('${email}','${hash}')`
-                    console.log(sql);
+                            
+                            callback({'success':'true', 'menssage':'Usuario nuevo', 'email': `${email}`, 'password':`${hash}`})
 
-                    //Hacemos la conexion a la DB
-                    conexion.query(sql, function(err, result){
-                        if(!err){
-                           
-                            console.log(result);
-                            objeto = {"success":'true', "mensaje":"Insercion realizada correctamente",'datos':[]};
-                            objeto.datos.push({
-                                "email":`${email}`,
-                                "password":`${password}`
-                            })
-                            conexion.end()
-                            callback(objeto)
                         }else{
-                        console.log(err);
-                        objeto = {"success":'false',"mensaje":"Conexion no fue posible",'datos':[]};
-                        objeto.datos.push({
-                            "email":`${email}`,
-                            "password":`${password}`
-                        })
-                        conexion.end()
-                        callback(objeto)
-                    }
-                })
+                            
+                            callback({'success':'false', 'menssage':'El usuario ya existe', 'email': `${email}`})
+                        }
+                        
+                    })
+
+                    sql = `INSERT INTO usuarios (email, password) VALUES ('${email}', '${hash}')`           // SQL (En caso de que no exista va insertar los varoles enla DB) 
+
+                    conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejecutamos nuestra sentecia SQL
+                        
+                        if(!err){
+
+                            callback({'success':'true', 'menssage':'Usuario insertado', 'email': `${email}`, 'password':`${hash}`})
+                        
+                        }else{
+                            
+                            callback({'success':'false', 'menssage':'Usuario NO insertado', 'email': `${email}`})
+                        }
+                    })
+
                 }else{
-                console.log('Usuario ya existe');
-                objeto = {"success":'false',"mensaje":"Usuario ya existe", 'datos':[]};
-                objeto.datos.push({
-                    "email":`${email}`,
-                    "password":`${password}`
-                })
+                    console.log(err);
+                }
+
                 conexion.end()
-                callback(objeto)
-            }
             })
-            }else{
-                console.log(err);
-            }
-        })
         }else{
-            console.log(err);  
+            console.log('No se ha podido realizar la conexion a la DB');
         }
     })
 }
 
-// --- MOSTRAR ---
+// ---   CRUD MOSTRAR   ---
+
+function mostrar_usuario(){
+
+}
+
+
+// --- CRUD ACTUALIZAR   ---
 
 /*
-    Ult. Actualizacon: 27 de Enero 2021
+    Ult. Actualizacon: 30 de Enero 2021
+    Descripcion: Esta funcion recibe por parametro (email y password) y permite que se pueda actualizar el usuario.
+
+    funcion: actualizar_usuario
+    parametros: email, password
+    devolucion: callback ({'success':'true/false', 'menssage':'xxx', 'email': `${email}`, 'password':`${hash}`})
+*/
+
+function actualizar_usuario(email, password, callback){
+
+    conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
+    })
+
+    conexion.connect(function(err){         // Creamos la conexion a la DB
+        
+        if(!err){
+
+            bcrypt.hash(password, 10, function(err, hash){          // Encriptamos la contraseña
+
+                if(!err){
+
+                    sql = `UPDATE usuarios SET password = '${hash}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+
+                    conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejercutamos a la sentencia SQL
+
+                        if(!err){
+
+                            if(result.changedRows == 1){
+
+                                callback({'success':'true', 'menssage':'Password actualizado', 'email': `${email}`, 'password':`${hash}`})
+
+                            }else{
+                                
+                                callback({'success':'true', 'menssage':'Password NO actualizado ', 'email': `${email}`})
+                            }
+
+                        }else{
+
+                            console.log(err);
+                            
+                        }
+                    })
+
+                }else{
+                    console.log(err);
+                    
+                }
+            })
+
+        }else{
+            console.log('No se ha podido conectar a la DB');
+        
+        }
+    })   
+}
+
+// ---   CRUD ELIMINAR   ---
+
+/*
+    Ult. Actualizacon: 30 de Enero 2021
+    Descripcion: Esta funcion recibe por parametro (email), si lo encuentra realiza el borrado de la base de datos.
+
+    funcion: eliminar_usuario
+    parametros: email
+    devolucion: callback({'success':'true/false', 'menssage':'xxx', 'email': `${email}`})
+*/
+
+function eliminar_usuario(email, callback){
+    
+    conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
+    })
+
+    conexion.connect(function(err){         // Creamos la conexion con la DB
+        
+        if(!err){
+            
+            sql = `SELECT * FROM usuarios WHERE email='${email}'`           // Instruccion SQL (buscara si existe el email introducido)
+            
+            conexion.query(sql, function(err, result){          // Conectamos con la DB y ejecutamos la sentencia SQL
+
+                if(result.length == 0){
+                    
+                    callback({'success':'false', 'menssage':'Usuario no encontrado', 'email': `${email}`})
+    
+                }else{
+                    
+                    sql = `DELETE FROM usuarios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe )
+
+                    conexion.query(sql, function(err, result){          // Conectamos con la DB y ejecutamos la sentencia SQL
+
+                        if(result.affectedRows != 0){           
+                            
+                            callback({'success':'true', 'menssage':'Usuario borrado', 'email': `${email}`})
+    
+                        }else{
+    
+                            callback({'success':'false', 'menssage':'Hemos tenido un problema', 'email': `${email}`})
+                        }
+                    })
+                }
+            })
+
+        }else{
+            
+            console.log('No se ha podido reqalizar la conexion a la DB');
+        }
+    })
+}
+
+// --- LOGIN ---
+
+/*
+    Ult. Actualizacon: 30 de Enero 2021
     Descripcion: Esta funcion recibe por parametro el email y password esta funcion nos muestra el usuario.
 
-    funcion: mostar_usuario
+    funcion: login
     parametros: email, password
-    devolucion: callback con un archivo JSON
-        {"success":true/false,
-            datos[{
-                "email":"xxxx", 
-                "password":"xxxx"
-            }]
-        }
+    devolucion: callback({'success':'true/false', 'menssage':'xxx', 'email': `${email}`, 'password':`${hash}`})
 */
 
 function login(email, password, callback){
 
-    conexion.connect(function(err){
-        if(err){
-            console.log(err); 
-        }else{
-            //Creamos la sentecia SQL
-            sql = `SELECT * FROM usuarios WHERE email = '${email}'`
-            //Hacemos la conexion a la DB
-            conexion.query(sql, function(err, result){
-            if (err){
-                console.log('Error en la busqueda')
-                
-                // NO tenemos exito y lo  devolvemos como un JSON
-                objeto = {"success": 'false', 'datos':[]}
-                objeto.datos.push({
-                    "email":`${email}`,
-                    "password":`${password}`
-                })
-
-                callback(objeto)
-
-            }else{
-
-                if(result.length == 0){
-                    console.log("Vacio")  
-                }else{
-                    console.log(result[0].password)
-                    bcrypt.compare(password, result[0].password, function(err, hash){
-                        console.log(hash)
-
-
-
-                        // Tenemos exito y lo devolvemos en un JSON
-                        objeto = {"success": `${hash}`, 'datos':[]}
-                        objeto.datos.push({
-                        "email":`${email}`,
-                        "password":`${password}`
-                    })
-
-                    callback(objeto)
-                    })
-                }
-            }
-
-
-                 
-            })   
-        }
-       
+    conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
     })
-}
 
-// --- ACTUALIZAR
+    conexion.connect(function(err){         //Hacemos la conexion a la DB
 
-/*
-    Ult. Actualizacon: 28 de Enero 2021
-    Descripcion: Esta funcion recibe por parametro el email y password, permite que se pueda actualizar el usuario.
-
-    funcion: actualizar_usuario
-    parametros: email, password
-    devolucion: callback con un archivo JSON
-        {"success":true/false,
-            datos[{
-                "email":"xxxx", 
-                "password":"xxx"
-            }]
-        }
-*/
-
-function actualizar_usuario(email, password, callback){
-    
-    console.log(password)
-
-    conexion.connect(function(err){
         if(!err){
-            bcrypt.hash(password, 10, function(err, hash){
-                console.log(hash);
-                if(!err){
-                    sql = `UPDATE usuarios SET password = '${hash}' WHERE email = '${email}'`
-                    conexion.query(sql, function(err, result){
-                        if(!err){
-                            console.log(result);
-                            console.log(result.changedRows)
-                            if(result.changedRows == 1){
+            
+            sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
+                
+            conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejecutamos la sentencia
+                
+                if (err){
 
-                                // Tenemos exito devolvermos el JSON
-
-                                objeto = {"success":'true', 'datos':[]};
-                                objeto.datos.push({
-                                    "email":`${email}`,
-                                    "password":`${password}`
-                                })
-
-                                callback(objeto)
-
-                            }else{
-                                success = false
-                                callback(objeto)
-                            }
-                        }else{
-                            console.log(err);
-                            success = false
-                            callback(objeto)
-                        }
-                    })
-                }else{
-                    console.log(err);
-                    success = false
-                    callback(objeto)
-                }
-            })
-        }else{
-            console.log(err);
-            success = false
-            callback(objeto)
-        }
-    })
-
-    
-}
-
-// --- ELIMINAR ---
-
-/*
-    Ult. Actualizacon: 27 de Enero 2021
-    Descripcion: Esta funcion recibe por parametro el email, si lo encuentra realiza el borrado de la base de datos.
-
-    funcion: eliminar_usuario
-    parametros: email
-    devolucion: callback con un archivo JSON
-        {"success":true/false,
-            datos[{
-                "email":"xxxx"
-            }]
-        }
-*/
-
-function eliminar_usuario(email, callback){
-
-    conexion.connect(function(err){
-        if(err){
-            console.log(err);
-        }else{
-            sql = `SELECT * FROM usuarios WHERE email='${email}'`  // Instruccion SQL
-            conexion.query(sql, function(err, result){
-                console.log(result.length);
-                if(result.length == 0){
-                    console.log('Usuario no encontrado');
-                    // Crear el objeto JSON para devolucion
-                    var objeto = {"success":'false','datos':[]}
-
-                    objeto.datos.push({
-                        "email":`${email}`,
-                    })
-                    callback(objeto)
+                    callback({'success':'false', 'menssage':'Email incorrecto', 'email': `${email}`})
 
                 }else{
-                    sql = `DELETE FROM usuarios WHERE email = '${email}'`
-                    console.log(sql);
-                    conexion.query(sql, function(err, result){
-                        console.log(result.affectedRows);
-                        if(result.affectedRows != 0){
-                            console.log('Usuario borrado');
-                            // Crear el objeto JSON para devolucion
-                            var objeto = {"success":'true','datos':[]}
 
-                            objeto.datos.push({
-                                "email":`${email}`,
-                            })
-                            callback(objeto)
+                    if(result.length == 0){
 
-                        }else{
-                            console.log('Hemos tenido un problema');
-                            // Crear el objeto JSON para devolucion
-                            var objeto = {"success":'false','datos':[]}
+                        callback({'success':'false', 'menssage':'Vacio'})
 
-                            objeto.datos.push({
-                                "email":`${email}`,
-                            })
-                            callback(objeto)
-                        }
-                    })
-                }
+                    }else{
+                        
+                        bcrypt.compare(password, result[0].password, function(err, hash){           // Encriptamosl a contraseña
+
+                            callback({'success':'true', 'menssage':'Email correcto', 'email': `${email}`, 'password':`${hash}`})
+                        })
+                    }
+                }   
             })
+
+        }else{
+
+            console.log('No se ha podido conectar a la DB')
+
         }
     })
 }
@@ -353,8 +267,8 @@ function eliminar_usuario(email, callback){
 
 module.exports = {
     'alta_usuario' : alta_usuario,
-    'login' : login,
+    'mostar_usuario' : mostrar_usuario,
     'actualizar_usuario' : actualizar_usuario,
     'eliminar_usuario' : eliminar_usuario,
-    'prueba_anadir': prueba_anadir
+    'login' : login,
 }

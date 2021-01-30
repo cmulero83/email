@@ -42,72 +42,69 @@ app.listen(port, () => {
 })
 
 
-// CRUD
-
-app.post('/prueba', function(req, res, next){
-  var email = req.body.email
-  var password = req.body.password
-
-  crud.prueba_anadir(email, password, function(test){
-    console.log(JSON.stringify(test));
-    return  res.status(200).end()
-
-
-  })
-})
-
-
-// --- ALTA ---
+// --- CRUD ALTA ---
 
 app.post('/alta', function(req, res, next){
+  
   var email = req.body.email
   var password = req.body.password
 
   crud.alta_usuario(email, password, function(test){
+    
     console.log(JSON.stringify(test));
-    return  res.status(200).json(test)
-
+    return  res.status(200).end()
 
   })
 })
 
-// --- MOSTAR ---
+// --- CRUD MOSTAR ---
 
 app.post('/mostrar', function(req, res, next){
+
   var email = req.body.email
   var password = req.body.password
 
   crud.mostrar_usuario(email, password, function(test){
+    
     console.log(JSON.stringify(test));
     return res.status(200).json(test)
+
   })
 })
 
-// --- ACTUALIZAR ---
+// --- CRUD ACTUALIZAR ---
 
 app.post('/actualizar', function(req, res, next){
+
   var email = req.body.email
   var password = req.body.password
 
   crud.actualizar_usuario(email, password, function(test){
-    console.log(JSON.stringify(test));
-    return res.status(200).json(test)
-  })
     
+    console.log(JSON.stringify(test));
+    return res.status(200).end()
+
+  })   
 })
 
-// --- ELIMINAR ---
+// --- CRUD ELIMINAR ---
 
 app.post('/eliminar', function(req, res, next){
+  
   var email = req.body.email
 
   crud.eliminar_usuario(email, function(test){
+    
     console.log(JSON.stringify(test));
-    return res.status(200).json(test)
+    return res.status(200).end()
+
   })
 })
 
+// --- LOGIN ---
+
 app.post('/webservice/login', function(req, res, next){
+  
   var email = req.body.email
   var password = req.body.password
 
@@ -120,6 +117,6 @@ app.post('/webservice/login', function(req, res, next){
     //Ejercicio, que se genere la sesion SOLO si se tuvo exito en la busqueda del usuario, es decir si exite....
 
     console.log(JSON.stringify(test));
-    return res.status(200).json(test)
+    return res.status(200).end()
   })
 })
