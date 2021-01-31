@@ -1,5 +1,5 @@
 const mysql = require('mysql')
-const bcrypt = require ('bcrypt')
+const bcrypt = require('bcrypt')
 
 // Conectamos a la DB y defenimos los valores
 
@@ -22,7 +22,7 @@ let database_password = 'Suerte05alba'
     devolucion: callback({'success':'true/false', 'menssage':'xxx', 'email': `${email}`, 'password':`${hash}`})
 */
 
-function alta_usuario(email, password, callback){
+function alta_usuario(email, password, callback) {
 
     conexion = mysql.createConnection({
         host: HOST,
@@ -31,50 +31,50 @@ function alta_usuario(email, password, callback){
         password: database_password
     })
 
-    bcrypt.hash(password, 10, function(err, hash){          // Encriptamos el password
+    bcrypt.hash(password, 10, function(err, hash) { // Encriptamos el password
 
-        if(!err){
-           
-            conexion.connect(function(err){         // Hacemos la conexion a la DB
+        if (!err) {
 
-                if(!err){
+            conexion.connect(function(err) { // Hacemos la conexion a la DB
 
-                    sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
+                if (!err) {
 
-                    conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejecutamos nuestra sentecia SQL
+                    sql = `SELECT * FROM usuarios WHERE email = '${email}'` // SQL (Buscara si existe el email que introducen)
 
-                        if(result.length == 0){
-                            
-                            callback({'success':'true', 'menssage':'Usuario nuevo', 'email': `${email}`, 'password':`${hash}`})
+                    conexion.query(sql, function(err, result) { // Nos conectamos a la DB y ejecutamos nuestra sentecia SQL
 
-                        }else{
-                            
-                            callback({'success':'false', 'menssage':'El usuario ya existe', 'email': `${email}`})
+                        if (result.length == 0) {
+
+                            callback({ 'success': 'true', 'menssage': 'Usuario nuevo', 'email': `${email}`, 'password': `${hash}` })
+
+                        } else {
+
+                            callback({ 'success': 'false', 'menssage': 'El usuario ya existe', 'email': `${email}` })
                         }
-                        
+
                     })
 
-                    sql = `INSERT INTO usuarios (email, password) VALUES ('${email}', '${hash}')`           // SQL (En caso de que no exista va insertar los varoles enla DB) 
+                    sql = `INSERT INTO usuarios (email, password) VALUES ('${email}', '${hash}')` // SQL (En caso de que no exista va insertar los varoles enla DB) 
 
-                    conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejecutamos nuestra sentecia SQL
-                        
-                        if(!err){
+                    conexion.query(sql, function(err, result) { // Nos conectamos a la DB y ejecutamos nuestra sentecia SQL
 
-                            callback({'success':'true', 'menssage':'Usuario insertado', 'email': `${email}`, 'password':`${hash}`})
-                        
-                        }else{
-                            
-                            callback({'success':'false', 'menssage':'Usuario NO insertado', 'email': `${email}`})
+                        if (!err) {
+
+                            callback({ 'success': 'true', 'menssage': 'Usuario insertado', 'email': `${email}`, 'password': `${hash}` })
+
+                        } else {
+
+                            callback({ 'success': 'false', 'menssage': 'Usuario NO insertado', 'email': `${email}` })
                         }
                     })
 
-                }else{
+                } else {
                     console.log(err);
                 }
-
+                request
                 conexion.end()
             })
-        }else{
+        } else {
             console.log('No se ha podido realizar la conexion a la DB');
         }
     })
@@ -82,7 +82,7 @@ function alta_usuario(email, password, callback){
 
 // ---   CRUD MOSTRAR   ---
 
-function mostrar_usuario(){
+function mostrar_usuario() {
 
 }
 
@@ -98,7 +98,7 @@ function mostrar_usuario(){
     devolucion: callback ({'success':'true/false', 'menssage':'xxx', 'email': `${email}`, 'password':`${hash}`})
 */
 
-function actualizar_usuario(email, password, callback){
+function actualizar_usuario(email, password, callback) {
 
     conexion = mysql.createConnection({
         host: HOST,
@@ -107,47 +107,47 @@ function actualizar_usuario(email, password, callback){
         password: database_password
     })
 
-    conexion.connect(function(err){         // Creamos la conexion a la DB
-        
-        if(!err){
+    conexion.connect(function(err) { // Creamos la conexion a la DB
 
-            bcrypt.hash(password, 10, function(err, hash){          // Encriptamos la contraseña
+        if (!err) {
 
-                if(!err){
+            bcrypt.hash(password, 10, function(err, hash) { // Encriptamos la contraseña
 
-                    sql = `UPDATE usuarios SET password = '${hash}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+                if (!err) {
 
-                    conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejercutamos a la sentencia SQL
+                    sql = `UPDATE usuarios SET password = '${hash}' WHERE email = '${email}'` // SQL (Actualizaremos la contraseña del email introducido)
 
-                        if(!err){
+                    conexion.query(sql, function(err, result) { // Nos conectamos a la DB y ejercutamos a la sentencia SQL
 
-                            if(result.changedRows == 1){
+                        if (!err) {
 
-                                callback({'success':'true', 'menssage':'Password actualizado', 'email': `${email}`, 'password':`${hash}`})
+                            if (result.changedRows == 1) {
 
-                            }else{
-                                
-                                callback({'success':'true', 'menssage':'Password NO actualizado ', 'email': `${email}`})
+                                callback({ 'success': 'true', 'menssage': 'Password actualizado', 'email': `${email}`, 'password': `${hash}` })
+
+                            } else {
+
+                                callback({ 'success': 'true', 'menssage': 'Password NO actualizado ', 'email': `${email}` })
                             }
 
-                        }else{
+                        } else {
 
                             console.log(err);
-                            
+
                         }
                     })
 
-                }else{
+                } else {
                     console.log(err);
-                    
+
                 }
             })
 
-        }else{
+        } else {
             console.log('No se ha podido conectar a la DB');
-        
+
         }
-    })   
+    })
 }
 
 // ---   CRUD ELIMINAR   ---
@@ -161,8 +161,8 @@ function actualizar_usuario(email, password, callback){
     devolucion: callback({'success':'true/false', 'menssage':'xxx', 'email': `${email}`})
 */
 
-function eliminar_usuario(email, callback){
-    
+function eliminar_usuario(email, callback) {
+
     conexion = mysql.createConnection({
         host: HOST,
         database: database_name,
@@ -170,38 +170,38 @@ function eliminar_usuario(email, callback){
         password: database_password
     })
 
-    conexion.connect(function(err){         // Creamos la conexion con la DB
-        
-        if(!err){
-            
-            sql = `SELECT * FROM usuarios WHERE email='${email}'`           // Instruccion SQL (buscara si existe el email introducido)
-            
-            conexion.query(sql, function(err, result){          // Conectamos con la DB y ejecutamos la sentencia SQL
+    conexion.connect(function(err) { // Creamos la conexion con la DB
 
-                if(result.length == 0){
-                    
-                    callback({'success':'false', 'menssage':'Usuario no encontrado', 'email': `${email}`})
-    
-                }else{
-                    
-                    sql = `DELETE FROM usuarios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe )
+        if (!err) {
 
-                    conexion.query(sql, function(err, result){          // Conectamos con la DB y ejecutamos la sentencia SQL
+            sql = `SELECT * FROM usuarios WHERE email='${email}'` // Instruccion SQL (buscara si existe el email introducido)
 
-                        if(result.affectedRows != 0){           
-                            
-                            callback({'success':'true', 'menssage':'Usuario borrado', 'email': `${email}`})
-    
-                        }else{
-    
-                            callback({'success':'false', 'menssage':'Hemos tenido un problema', 'email': `${email}`})
+            conexion.query(sql, function(err, result) { // Conectamos con la DB y ejecutamos la sentencia SQL
+
+                if (result.length == 0) {
+
+                    callback({ 'success': 'false', 'menssage': 'Usuario no encontrado', 'email': `${email}` })
+
+                } else {
+
+                    sql = `DELETE FROM usuarios WHERE email = '${email}'` // Instruccion SQL (Eliminara el email introducido si existe )
+
+                    conexion.query(sql, function(err, result) { // Conectamos con la DB y ejecutamos la sentencia SQL
+
+                        if (result.affectedRows != 0) {
+
+                            callback({ 'success': 'true', 'menssage': 'Usuario borrado', 'email': `${email}` })
+
+                        } else {
+
+                            callback({ 'success': 'false', 'menssage': 'Hemos tenido un problema', 'email': `${email}` })
                         }
                     })
                 }
             })
 
-        }else{
-            
+        } else {
+
             console.log('No se ha podido reqalizar la conexion a la DB');
         }
     })
@@ -218,7 +218,7 @@ function eliminar_usuario(email, callback){
     devolucion: callback({'success':'true/false', 'menssage':'xxx', 'email': `${email}`, 'password':`${hash}`})
 */
 
-function login(email, password, callback){
+function login(email, password, callback) {
 
     conexion = mysql.createConnection({
         host: HOST,
@@ -227,35 +227,35 @@ function login(email, password, callback){
         password: database_password
     })
 
-    conexion.connect(function(err){         //Hacemos la conexion a la DB
+    conexion.connect(function(err) { //Hacemos la conexion a la DB
 
-        if(!err){
-            
-            sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
-                
-            conexion.query(sql, function(err, result){          // Nos conectamos a la DB y ejecutamos la sentencia
-                
-                if (err){
+        if (!err) {
 
-                    callback({'success':'false', 'menssage':'Email incorrecto', 'email': `${email}`})
+            sql = `SELECT * FROM usuarios WHERE email = '${email}'` // SQL (Buscara si existe el email que introducen)
 
-                }else{
+            conexion.query(sql, function(err, result) { // Nos conectamos a la DB y ejecutamos la sentencia
 
-                    if(result.length == 0){
+                if (err) {
 
-                        callback({'success':'false', 'menssage':'Vacio'})
+                    callback({ 'success': 'false', 'menssage': 'Email incorrecto', 'email': `${email}` })
 
-                    }else{
-                        
-                        bcrypt.compare(password, result[0].password, function(err, hash){           // Encriptamosl a contraseña
+                } else {
 
-                            callback({'success':'true', 'menssage':'Email correcto', 'email': `${email}`, 'password':`${hash}`})
+                    if (result.length == 0) {
+
+                        callback({ 'success': 'false', 'menssage': 'Vacio' })
+
+                    } else {
+
+                        bcrypt.compare(password, result[0].password, function(err, hash) { // Encriptamosl a contraseña
+
+                            callback({ 'success': 'true', 'menssage': 'Email correcto', 'email': `${email}`, 'password': `${hash}` })
                         })
                     }
-                }   
+                }
             })
 
-        }else{
+        } else {
 
             console.log('No se ha podido conectar a la DB')
 
@@ -266,9 +266,9 @@ function login(email, password, callback){
 
 
 module.exports = {
-    'alta_usuario' : alta_usuario,
-    'mostar_usuario' : mostrar_usuario,
-    'actualizar_usuario' : actualizar_usuario,
-    'eliminar_usuario' : eliminar_usuario,
-    'login' : login,
+    'alta_usuario': alta_usuario,
+    'mostar_usuario': mostrar_usuario,
+    'actualizar_usuario': actualizar_usuario,
+    'eliminar_usuario': eliminar_usuario,
+    'login': login,
 }
