@@ -1,15 +1,16 @@
-// Servidor expres
-
 const express = require('express')
-const app = express()
-const port = 3000
-
-var session = require("express-session")
+const session = require('express-session')
+const bodyParser = require('body-parser')
 
 //Importamos la pagina donde tenemos CRUD
 
-const crud = require('./crudUsuario')
-//const middelware = require('./mi_middelware')
+//const crud = require('./crudUsuario')
+const crudPromesas = require('./crudPromesas')
+
+
+const app = express()   // Servidor expres
+const port = 3000
+
 
 // Inicio configruacion Middelware
 
@@ -28,8 +29,6 @@ app.use(session({
   saveUninitialized: false
 }))
 
-
-const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
@@ -85,7 +84,7 @@ app.post('/actualizar', function(req, res, next){
     return res.status(200).end()
 
   })   
-})
+}) 
 
 // --- CRUD ELIMINAR ---
 
@@ -97,6 +96,67 @@ app.post('/eliminar', function(req, res, next){
     
     console.log(JSON.stringify(test));
     return res.status(200).end()
+
+  })
+}) 
+
+
+// CRUD CON PROMESAS
+
+// --- ALTA USUARIO ---
+
+app.post('/altaUsuario', function(req, res, next){
+  
+  var email = req.body.email
+  var password = req.body.password
+
+  crudPromesas.altaUsuario(email, password, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
+// --- ACTUALIZAR USUARIO ---
+
+app.post('/actualizarUsuario', function(req, res, next){
+  
+  var email = req.body.email
+  var password = req.body.password
+
+  crudPromesas.actualizarUsuario(email, password, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
+// --- MOSTRAR USUARIO ---
+
+app.post('/mostrarUsuario', function(req, res, next){
+  
+  var email = req.body.email
+
+  crudPromesas.mostrarUsuario(email, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
+// --- ELIMINAR USUARIO ---
+
+app.post('/eliminarUsuario', function(req, res, next){
+  
+  var email = req.body.email
+
+  crudPromesas.eliminarUsuario(email, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
 
   })
 })

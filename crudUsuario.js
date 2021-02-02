@@ -247,7 +247,7 @@ function login(email, password, callback){
 
                     }else{
                         
-                        bcrypt.compare(password, result[0].password, function(err, hash){           // Encriptamosl a contraseña
+                        bcrypt.compare(password, result[0].password, function(err, hash){           // Encriptamos la contraseña
 
                             callback({'success':'true', 'menssage':'Email correcto', 'email': `${email}`, 'password':`${hash}`})
                         })
