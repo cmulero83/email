@@ -2,6 +2,8 @@ const mysql = require('mysql')
 const bcrypt = require ('bcrypt')
 const util = require('util')
 
+const nodemail = require('./nodemail')
+
 // Conectamos a la DB y defenimos los valores
 
 let HOST = '65.99.225.55'
@@ -26,16 +28,18 @@ async function altaUsuario (email, password, callback) {
     const query = util.promisify(conexion.query).bind(conexion)          // Conexion a la DB
     
     try {
-        
-        let sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
-        let result = await query(sql)
 
-        sql = `INSERT INTO usuarios (email, password) VALUES ('${email}','${password}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
-        result = await query(sql)
+        const hash = bcrypt.hashSync(password, 10);         // Encriptar password
+        console.log(hash);
+
+        sql = `INSERT INTO usuarios (email, password) VALUES ('${email}','${hash}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
+        let result = await query(sql)
         console.log(result);
 
         message = 'Se ha realizado con exito la operacion'
         success = true
+
+        nodemail.enviarCorreo(email)         // Aqui voy a enviar un correo al nuevo usuario
 
     } catch (err) {
 
@@ -68,9 +72,9 @@ async function mostrarUsuario (email, callback) {
 
         let sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
-        console.log(result);
+        console.log(result.length);
 
-        if (email.RowDataPacket == null) {
+        if (result.length == 0) {
 
             message = 'El usuario introducido no existe'
             success = false 
@@ -111,7 +115,10 @@ async function actualizarUsuario (email, password, callback) {
 
     try {
 
-        let sql = `UPDATE usuarios SET password = '${password}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+        const hash = bcrypt.hashSync(password, 10);         // Encriptar password
+        console.log(hash);
+
+        let sql = `UPDATE usuarios SET password = '${hash}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
         let result = await query(sql)
         console.log(result);
 

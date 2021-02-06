@@ -1,5 +1,6 @@
 const mysql = require('mysql')
 const util = require('util')
+const bcrypt = require ('bcrypt')
 
 // Conectamos a la DB y defenimos los valores
 
@@ -26,14 +27,26 @@ async function login (email, password, callback) {
 
     try {
 
-        let sql = `SELECT * FROM usuarios WHERE email = '${email}`          // SQL (Buscara si existe el email que introducen)
+        let sql = `SELECT * FROM usuarios WHERE email = '${email}'`          // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
-        console.log(result);
+        console.log(result[0].password);
+        
+        let compararPassword = await bcrypt.compare(password, result[0].password)           // Comparamos el password
 
-        message = 'Usuario existente'
-        success = true
-    
+        if(compararPassword){
+
+            message = 'Usuario existente'
+            success = true 
+
+        }else{
+
+            message = 'Password erroneo'
+            success = false
+        }
+
+
     } catch (err) {
+        console.log(err)
 
         message = err.sqlMessage
         success = false
@@ -42,7 +55,7 @@ async function login (email, password, callback) {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`})
+        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'password':`${password}`})
     }
     
 }
