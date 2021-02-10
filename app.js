@@ -31,7 +31,7 @@ app.listen(port, () => {
 
 // --- CRUD ALTA ---
 
-app.post('alta', function(req, res, next){
+app.post('/alta', function(req, res, next){
   
   var email = req.body.email
   var password = req.body.password
@@ -94,37 +94,31 @@ app.post('/eliminar', function(req, res, next){
 // --- ALTA USUARIO ---
 
 app.post('/altaUsuario', function(req, res, next){
-  
-  if(req.session.user_id != null){      // Comprobar si tenemos una sesion activa...
 
-    var email = req.body.email
-    var password = req.body.password
+  var email = req.body.email
+  var password = req.body.password
 
-    crudPromesas.altaUsuario(email, password, function(test){
+  crudPromesas.altaUsuario(email, password, function(test){
     
-      console.log(JSON.stringify(test));
-      return  res.status(200).json(test)
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
 
-    })
-  } 
+  })
 })
 
 // --- ACTUALIZAR USUARIO ---
 
 app.post('/actualizarUsuario', function(req, res, next){
 
-  if(req.session.user_id != null){      // Comprobar si tenemos una sesion activa...
+  var email = req.body.email
+  var password = req.body.password
 
-    var email = req.body.email
-    var password = req.body.password
-
-    crudPromesas.actualizarUsuario(email, password, function(test){
+  crudPromesas.actualizarUsuario(email, password, function(test){
     
-      console.log(JSON.stringify(test));
-      return  res.status(200).json(test)
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
 
-    })
-  } 
+  }) 
 })
 
 // --- MOSTRAR USUARIO ---
@@ -147,22 +141,16 @@ app.post('/mostrarUsuario', function(req, res, next){
 // --- ELIMINAR USUARIO ---
 
 app.post('/eliminarUsuario', function(req, res, next){
+      
+  var email = req.body.email
 
-  if(req.session.user_id != null){      // Comprobar si tenemos una sesion activa...
+  crudPromesas.eliminarUsuario(email, function(test){
     
-    var email = req.body.email
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
 
-    crudPromesas.eliminarUsuario(email, function(test){
-    
-      console.log(JSON.stringify(test));
-      return  res.status(200).json(test)
-
-    })
-  }else{
-    return res.status(400).end()
-  }
-  
-  
+  })
+ 
 })
 
 // --- LOGIN ---
