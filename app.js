@@ -125,17 +125,13 @@ app.post('/actualizarUsuario', function(req, res, next){
 
 app.post('/mostrarUsuario', function(req, res, next){
   
-  if(req.session.user_id != null){      // Comprobar si tenemos una sesion activa...
+  var email = req.body.email
+  crudPromesas.mostrarUsuario(email, function(test){
   
-    var email = req.body.email
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+  })
 
-    crudPromesas.mostrarUsuario(email, function(test){
-    
-      console.log(JSON.stringify(test));
-      return  res.status(200).json(test)
-
-    })
-  } 
 })
 
 // --- ELIMINAR USUARIO ---

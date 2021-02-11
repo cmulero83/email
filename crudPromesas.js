@@ -195,10 +195,15 @@ async function eliminarUsuario (email, callback) {
     }
 }
 
+function suma(a,b){
+    return a + b
+}
+
 
 module.exports = {
     'altaUsuario' : altaUsuario,
     'actualizarUsuario' : actualizarUsuario,
     'mostrarUsuario' : mostrarUsuario,
-    'eliminarUsuario' : eliminarUsuario 
+    'eliminarUsuario' : eliminarUsuario,
+    'suma': suma
 }
