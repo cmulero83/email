@@ -1,4 +1,6 @@
-function makeid() {         // Con esta funcion genero letrar aleatoria
+// Con esta funcion genero letrar aleatoria
+
+function makeid() {         
 
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

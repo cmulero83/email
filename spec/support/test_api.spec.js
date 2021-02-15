@@ -19,16 +19,16 @@ var makeid = require('../../util')
 
 var email = makeid.makeid() + '@test.es'
 var password = makeid.makeid()
+var nombre = makeid.makeid() 
+var apellido = makeid.makeid()
+var id = makeid.makeid()
+var pais = makeid.makeid()
 
 // Generamos en JSON que tienes POSTMAN
 
-var data = `{"email":"${email}", "password":"${password}"}`
-//var json_obj = JSON.parse(data)
+var data = `{"email":"${email}", "password":"${password}","pais":"${pais}","nombre":"${nombre}","apellido":"${apellido}","id":"${id}" }`
 
 try { var json_obj = JSON.parse(data) } catch (e) { console.log(e) }            // Vamos a controlar un posible err al hacer el parse
-
-console.log(data);
-console.log(json_obj);
 
 
 /* describe('GET /', () => {
@@ -48,7 +48,7 @@ console.log(json_obj);
 }) */
 
 
- describe('Comprobar si tenemos el servidor arriba', function() {
+describe('Comprobar si tenemos el servidor arriba', function() {
     it('Retorna 200', function(done){
         request.get(baseUrl, function(err, response, body){
             expect(response.statusCode).toBe(200)
@@ -156,6 +156,65 @@ describe('Probamos el CRUD', function() {
         crudPromesas.eliminarUsuario(email, function(test){
 
             expect(test.success).toBe('true')
+            done()
+        })
+    })
+})
+
+// CRUD CORREOS ALEATORIOS
+
+describe('Vamos añadir un usuario a la DB', function() {
+    it('Vamos a comprobar 200, que la cadena llegue y devuelve true y se dio de alta', function(done) {
+        request.post({
+            url: baseUrl + '/alta',
+            form: json_obj
+        }, function(err, response, body) {
+            let test3 = JSON.parse(body)
+            expect(response.statusCode).toBe(200)
+            expect(test3.success).toBe('true')
+            done()
+        })
+    })
+      
+})
+
+describe('Vamos a mostrar un usuario', function() {
+    it('Vamos a comprabar 200, que la cadena llega y devuelve true, muestra el usuario', function(done) {
+        request.post({
+            url: baseUrl + '/mostrar',
+            form: json_obj
+        }, function(err, response, body) {
+            let test3 = JSON.parse(body)
+            expect(response.statusCode).toBe(200)
+            expect(test3.success).toBe('true')
+            done()
+        })
+    })
+})
+
+describe('Vamos a actualizar un usuario', function() {
+    it('Vamos a comprabar 200, que la cadena llega y devuelve true, usuario actualizado', function(done) {
+        request.post({
+            url: baseUrl + '/actualizar',
+            form: json_obj
+        }, function(err, response, body) {
+            let test3 = JSON.parse(body)
+            expect(response.statusCode).toBe(200)
+            expect(test3.success).toBe('true')
+            done()
+        })
+    })
+})
+
+describe('Vamos a eliminar un usuario', function() {
+    it('Vamos a comprabar 200, que la cadena llega y devuelve true, usuario borrado', function(done) {
+        request.post({
+            url: baseUrl + '/eliminar',
+            form: json_obj
+        }, function(err, response, body) {
+            let test3 = JSON.parse(body)
+            expect(response.statusCode).toBe(200)
+            expect(test3.success).toBe('true')
             done()
         })
     })

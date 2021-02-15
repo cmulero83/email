@@ -1,25 +1,14 @@
 const mysql = require('mysql')
 const util = require('util')
 const bcrypt = require ('bcrypt')
+const { database } = require('./config_db')
 
-// Conectamos a la DB y defenimos los valores
-
-let HOST = '65.99.225.55'
-let database_name = 'mailshi1_alba'
-let database_user = 'mailshi1_alba'
-let database_password = 'Suerte05alba'
+var conexion = mysql.createConnection(database)
 
 
 // --- LOGIN ---
 
 async function login (email, password, callback) {
-
-    const conexion = mysql.createConnection({
-        host: HOST,
-        database: database_name,
-        user: database_user,
-        password: database_password
-    })
 
     //  NODE NATIVE PROMISIFY
 

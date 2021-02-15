@@ -1,22 +1,13 @@
 const mysql = require('mysql')
 const bcrypt = require ('bcrypt')
 const readLineSync = require('readline-sync')  // Permite realizar INPUT.... (en desarrollo...) $ npm install readline-sync
+const { database } = require('./config_db')
 
 console.log("\033[2J\033[0f") // Asi puedes borrar la pantalla del terminal para que sea mas limpio
 
-// Declaracion de variables
-
-let conexion
 let opcion = 0
 
-// Valores de conexion a la base de datos...
-
-conexion = mysql.createConnection({
-    host:'65.99.225.55',
-    database:'mailshi1_alba',
-    user:'mailshi1_alba',
-    password:'Suerte05alba'
-})
+var conexion = mysql.createConnection(database)
 
 conexion.connect(function(err){
     if(!err)

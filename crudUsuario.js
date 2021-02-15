@@ -1,14 +1,8 @@
 const mysql = require('mysql')
 const bcrypt = require ('bcrypt')
+const { database } = require('./config_db')
 
-// Conectamos a la DB y defenimos los valores
-
-let conexion
-
-let HOST = '65.99.225.55'
-let database_name = 'mailshi1_alba'
-let database_user = 'mailshi1_alba'
-let database_password = 'Suerte05alba'
+var conexion = mysql.createConnection(database)
 
 
 // ---   CRUD ALTA   ---
@@ -23,13 +17,6 @@ let database_password = 'Suerte05alba'
 */
 
 function alta_usuario(email, password, callback){
-
-    conexion = mysql.createConnection({
-        host: HOST,
-        database: database_name,
-        user: database_user,
-        password: database_password
-    })
 
     bcrypt.hash(password, 10, function(err, hash){          // Encriptamos el password
 
@@ -100,13 +87,6 @@ function mostrar_usuario(){
 
 function actualizar_usuario(email, password, callback){
 
-    conexion = mysql.createConnection({
-        host: HOST,
-        database: database_name,
-        user: database_user,
-        password: database_password
-    })
-
     conexion.connect(function(err){         // Creamos la conexion a la DB
         
         if(!err){
@@ -162,13 +142,6 @@ function actualizar_usuario(email, password, callback){
 */
 
 function eliminar_usuario(email, callback){
-    
-    conexion = mysql.createConnection({
-        host: HOST,
-        database: database_name,
-        user: database_user,
-        password: database_password
-    })
 
     conexion.connect(function(err){         // Creamos la conexion con la DB
         
@@ -219,13 +192,6 @@ function eliminar_usuario(email, callback){
 */
 
 function login(email, password, callback){
-
-    conexion = mysql.createConnection({
-        host: HOST,
-        database: database_name,
-        user: database_user,
-        password: database_password
-    })
 
     conexion.connect(function(err){         //Hacemos la conexion a la DB
 

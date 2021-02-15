@@ -195,8 +195,185 @@ async function eliminarUsuario (email, callback) {
     }
 }
 
-function suma(a,b){
-    return a + b
+// CRUD CORREO ALEATORIO
+
+// --- CRUD ALTA USUARIO ---
+
+async function alta (id, email, nombre, apellido, pais, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
+    })
+
+    //  NODE NATIVE PROMISIFY
+
+    const query = util.promisify(conexion.query).bind(conexion)          // Conexion a la DB
+    
+    try {
+
+       
+
+        sql = `INSERT INTO correos_aleatorios (id, email, nombre, apellido, pais) VALUES ('${id}','${email}', '${nombre}', '${apellido}', '${pais}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
+        let result = await query(sql)
+        console.log(result);
+
+        message = 'Se ha realizado con exito la operacion'
+        success = true
+
+        nodemail.enviarCorreo(email)         // Aqui voy a enviar un correo al nuevo usuario
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        conexion.end()
+
+        callback({'success':`${success}`, 'message':`${message}`,'id':`${id}`, 'email':`${email}`, 'nombre':`${nombre}`, 'apellido':`${apellido}`, 'pais':`${pais}`})
+
+    }
+}
+
+// --- CRUS MOSTAR USAURIO ---
+
+async function mostrar (email, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)          // Conexion a la DB
+    
+    try {
+
+        let sql = `SELECT * FROM correos_aleatorios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
+        let result = await query(sql)
+        console.log(result.length);
+
+        if (result.length == 0) {
+
+            message = 'El usuario introducido no existe'
+            success = false 
+            
+        } else {
+
+            message = 'Usuario encontrado'
+            success = true
+                       
+        }
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        conexion.end()
+
+        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`})
+
+    }
+}
+
+// --- CRUD ACTUALIZAR USUARIO ---
+
+async function actualizar (email, pais, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a la DB
+
+    try {
+
+        let sql = `UPDATE correos_aleatorios SET pais = '${pais}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+        let result = await query(sql)
+        console.log(result);
+
+        if (pais == undefined) {
+
+            message = 'Introduce un pais'
+            success = false
+
+        } else {
+
+            message = 'Pais actualizado'
+            success = true
+        }
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        conexion.end()
+
+        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'pais':`${pais}`})
+
+    }
+} 
+
+// --- CRUD ELIMINAR USUARIO ---
+
+async function eliminar (email, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)          // Conexion a la DB
+
+    try {
+
+        let sql = `SELECT * FROM correos_aleatorios WHERE email='${email}'`           // Instruccion SQL (buscara si existe el email introducido)
+        let result = await query(sql)
+
+        sql = `DELETE FROM correos_aleatorios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe)
+        result = await query(sql)
+        console.log(result);
+
+        if (email == email) {
+
+            message = 'Se ha eliminado con exito'
+            success = true 
+
+        } else {
+
+            message = 'El usuario introducido no existe'
+            success = false
+
+        } 
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        conexion.end()
+
+        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`})
+
+    }
 }
 
 
@@ -205,5 +382,8 @@ module.exports = {
     'actualizarUsuario' : actualizarUsuario,
     'mostrarUsuario' : mostrarUsuario,
     'eliminarUsuario' : eliminarUsuario,
-    'suma': suma
+    'alta' : alta,
+    'actualizar' : actualizar,
+    'mostrar' : mostrar,
+    'eliminar' : eliminar
 }
