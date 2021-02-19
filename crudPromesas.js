@@ -214,8 +214,6 @@ async function alta (id, email, nombre, apellido, pais, callback) {
     
     try {
 
-       
-
         sql = `INSERT INTO correos_aleatorios (id, email, nombre, apellido, pais) VALUES ('${id}','${email}', '${nombre}', '${apellido}', '${pais}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
         let result = await query(sql)
         console.log(result);
