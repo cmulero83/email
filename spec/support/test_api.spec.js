@@ -1,7 +1,7 @@
 var request = require("request");
 var baseUrl = 'http://localhost:3000'
 var crudPromesas = require('../../crudPromesas')
-var makeid = require('../../util')
+var makeid = require('../../utilidades/util')
 
 /* describe('Server', () => {
     var server;

@@ -2,6 +2,7 @@ const mysql = require('mysql')
 const bcrypt = require ('bcrypt')
 const util = require('util')
 
+const makeid = require('./utilidades/util')
 const nodemail = require('./nodemail')
 
 // Conectamos a la DB y defenimos los valores
@@ -14,7 +15,7 @@ let database_password = 'Suerte05alba'
 
 // --- CRUD ALTA USUARIO ---
 
-async function altaUsuario (email, password, callback) {
+async function altaUsuario (email, password, id, empresa, callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -32,7 +33,10 @@ async function altaUsuario (email, password, callback) {
         const hash = bcrypt.hashSync(password, 10);         // Encriptar password
         console.log(hash);
 
-        sql = `INSERT INTO usuarios (email, password) VALUES ('${email}','${hash}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
+
+        var id = makeid.makeid()
+
+        sql = `INSERT INTO usuarios (email, password, id, empresa) VALUES ('${email}','${hash}','${id}', '${empresa}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
         let result = await query(sql)
         console.log(result);
 
@@ -50,12 +54,12 @@ async function altaUsuario (email, password, callback) {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'password':`${password}`})
+        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'password':`${password}`, 'id':`${id}`, 'empresa':`${empresa}`})
 
     }
 }
 
-// --- CRUS MOSTAR USAURIO ---
+// --- CRUD MOSTAR USURIO ---
 
 async function mostrarUsuario (email, callback) {
 
@@ -72,7 +76,6 @@ async function mostrarUsuario (email, callback) {
 
         let sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
-        console.log(result.length);
 
         if (result.length == 0) {
 
@@ -102,7 +105,7 @@ async function mostrarUsuario (email, callback) {
 
 // --- CRUD ACTUALIZAR USUARIO ---
 
-async function actualizarUsuario (email, password, callback) {
+async function actualizarUsuario (email, empresa, password, callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,

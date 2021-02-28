@@ -1,6 +1,6 @@
 const mysql = require('mysql')
 const bcrypt = require ('bcrypt')
-const { database } = require('./config_db')
+const { database } = require('../utilidades/config_db')
 
 var conexion = mysql.createConnection(database)
 

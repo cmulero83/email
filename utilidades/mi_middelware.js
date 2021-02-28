@@ -1,7 +1,7 @@
 // Inicio configruacion Middelware
 
 function logger(req, res, next){
-    console.log(new Date(), req.url);
+    console.log(`Ruta recivida: ${req.protocol}://${req.get('host')}${req.originalUrl}`);
     next()
 }
 

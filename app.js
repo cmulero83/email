@@ -1,11 +1,10 @@
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 const crudPromesas = require('./crudPromesas')
 const login = require('./login')
-const middelware = require('./mi_middelware')
-//const cargaUsuarios = require('./cargaUsuarios')
 
 const app = express()   // Servidor expres
 const port = 3000
@@ -19,19 +18,16 @@ app.use(session({     // Vamos a manejar sesiones
   saveUninitialized: false
 }))
 
-app.use(middelware.logger)
+app.use(morgan('dev'))
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use(express.static('public'))
 
 app.listen(port, () => {
   console.log(`El puerto se esta escuchando por: http://localhost:${port}`)
 })
 
 
-
-// CRUD CON PROMESAS
+//  RUTAS + CRUD CON PROMESAS
 
 // --- ALTA USUARIO ---
 
@@ -39,9 +35,11 @@ app.post('/altaUsuario', function(req, res, next){
 
   var email = req.body.email
   var password = req.body.password
+  var id = req.body.id
+  var empresa = req.body.empresa
+  
+  crudPromesas.altaUsuario(email, password, id, empresa, function(test){
 
-  crudPromesas.altaUsuario(email, password, function(test){
-    
     console.log(JSON.stringify(test));
     return  res.status(200).json(test)
 
@@ -50,7 +48,7 @@ app.post('/altaUsuario', function(req, res, next){
 
 // --- ACTUALIZAR USUARIO ---
 
-app.post('/actualizarUsuario', function(req, res, next){
+app.put('/actualizarUsuario', function(req, res, next){
 
   var email = req.body.email
   var password = req.body.password
@@ -68,17 +66,19 @@ app.post('/actualizarUsuario', function(req, res, next){
 app.post('/mostrarUsuario', function(req, res, next){
   
   var email = req.body.email
+
   crudPromesas.mostrarUsuario(email, function(test){
   
     console.log(JSON.stringify(test));
     return  res.status(200).json(test)
+
   })
 
 })
 
 // --- ELIMINAR USUARIO ---
 
-app.post('/eliminarUsuario', function(req, res, next){
+app.delete('/eliminarUsuario', function(req, res, next){
       
   var email = req.body.email
 
@@ -111,7 +111,7 @@ app.post('/webservice/login', function(req, res, next){
   })
 })
 
-// CRUD CORREO ALEATORIOS
+// RUTAS + CRUD CORREO ALEATORIOS
 
 // --- ALTA USUARIO ---
 

@@ -1,11 +1,8 @@
 const mysql = require('mysql')
-const makeid = require('./util')
-const { database } = require('./config_db')
+const makeid = require('./utilidades/util')
+const { database } = require('./utilidades/config_db')
 
 var conexion = mysql.createConnection(database)
-
-
-//var password = makeid.makeid()
 
 conexion.connect(function(err){
     
@@ -32,18 +29,21 @@ conexion.connect(function(err){
 
                 if(!err){
 
-                    //console.log('Se ha añadido correctamento lo datos a la base de datos');
+                    console.log('Añadiendo correos aleatorios: ' + i);
 
                 }else{
 
                     console.log(err);
                 }
+
             })
         }
 
-    }else {
+        conexion.end()
 
-        throw err
+    } else {
+
+        throw err      
     }
 })
 
