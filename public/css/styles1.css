@@ -1,0 +1,19 @@
+body{
+    background-color:#F2F4F4;
+    margin:40px 10px ;
+}
+
+.btn-editar{
+    background-color: #F39C12 ;
+    color: white;
+}
+
+.btn-eliminar{
+    background-color: #DC143C;
+    color: white;
+}
+
+tr{
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

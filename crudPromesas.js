@@ -242,7 +242,7 @@ async function alta (id, email, nombre, apellido, pais, callback) {
 
 // --- CRUS MOSTAR USAURIO ---
 
-async function mostrar (email, callback) {
+async function mostrar (id_usuarios, callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -255,19 +255,24 @@ async function mostrar (email, callback) {
     
     try {
 
-        let sql = `SELECT * FROM correos_aleatorios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
+        let sql = `SELECT * FROM correos_aleatorios WHERE id_usuarios = '${id_usuarios}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
-        console.log(result.length);
+        console.log(result);
+        //console.log(result.length);
 
         if (result.length == 0) {
 
-            message = 'El usuario introducido no existe'
+            message = 'Correo no encontrado'
             success = false 
+            resultado = null
             
         } else {
 
-            message = 'Usuario encontrado'
+
+            message = 'Correos encontrados'
             success = true
+            resultado = result
+            console.log(resultado[0].id_usuarios);
                        
         }
 
@@ -275,12 +280,13 @@ async function mostrar (email, callback) {
 
         message = err.sqlMessage
         success = false
+        resultado = null
 
     } finally {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`})
+        callback({'success':`${success}`, 'message':`${message}`, 'id_usuarios':`${id_usuarios}`, 'resultado':`${resultado}`})
 
     }
 }

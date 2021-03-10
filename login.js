@@ -44,7 +44,7 @@ async function login (email, password, callback) {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'password':`${password}`})
+        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`})
     }
     
 }

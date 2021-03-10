@@ -1,6 +1,5 @@
-const mysql = require('mysql')
-const makeid = require('./utilidades/util')
 const { database } = require('./utilidades/config_db')
+const makeid = require('./utilidades/util')
 
 var conexion = mysql.createConnection(database)
 

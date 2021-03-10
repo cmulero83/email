@@ -38,6 +38,7 @@ app.post('/altaUsuario', function(req, res, next){
   var id = req.body.id
   var empresa = req.body.empresa
   
+  
   crudPromesas.altaUsuario(email, password, id, empresa, function(test){
 
     console.log(JSON.stringify(test));
@@ -150,8 +151,9 @@ app.post('/actualizar', function(req, res, next){
 
 app.post('/mostrar', function(req, res, next){
   
-  var email = req.body.email
-  crudPromesas.mostrar(email, function(test){
+  var id_usuarios = req.body.id_usuarios
+  console.log(req.body);
+  crudPromesas.mostrar(id_usuarios, function(test){
   
     console.log(JSON.stringify(test));
     return  res.status(200).json(test)
