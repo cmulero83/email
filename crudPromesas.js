@@ -120,17 +120,20 @@ async function actualizarUsuario (email, password, callback) {
         const hash = bcrypt.hashSync(password, 10);         // Encriptar password
         console.log(hash);
 
-        let sql = `UPDATE usuarios SET password = '${hash}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+        let sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
 
         if (result.length == 0) {
 
-            message = 'Introduce una contraseña'
+            message = 'El usuario no existe'
             success = false
 
         } else {
+            
+            sql = `UPDATE usuarios SET password = '${hash}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+            result = await query(sql)
 
-            message = 'Se ha actualizado la contraseña con exito'
+            message = 'Contraseña actualizada con exito'
             success = true
         }
 
@@ -163,19 +166,21 @@ async function eliminarUsuario (email, callback) {
 
     try {
 
-        let sql = `DELETE FROM usuarios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe)
+        let sql = `SELECT * FROM usuarios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
-        console.log(result);
 
-        if (result == email) {
+        if (result.length == 0) {
 
-            message = 'Se ha eliminado con exito'
-            success = true 
+            message = 'El email introducido no existe'
+            success = false
 
         } else {
 
-            message = 'El usuario introducido no existe'
-            success = false
+            sql = `DELETE FROM usuarios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe)
+            result = await query(sql)
+
+            message = 'Email eliminado con exito'
+            success = true
 
         } 
 
@@ -252,8 +257,6 @@ async function mostrar (id_usuarios, callback) {
 
         let sql = `SELECT * FROM correos_aleatorios WHERE id_usuarios = '${id_usuarios}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
-        console.log(result);
-        //console.log(result.length);
 
         if (result.length == 0) {
 
@@ -262,7 +265,6 @@ async function mostrar (id_usuarios, callback) {
             resultado = null
             
         } else {
-
 
             message = 'Correos encontrados'
             success = true
@@ -278,7 +280,9 @@ async function mostrar (id_usuarios, callback) {
         resultado = null
 
     } finally {
+
         callback(resultado)
+
         conexion.end()
 
         //callback({'success':`${success}`, 'message':`${message}`, 'id_usuarios':`${id_usuarios}`, 'resultado':`${resultado}`})
@@ -301,16 +305,18 @@ async function actualizar (email, pais, callback) {
 
     try {
 
-        let sql = `UPDATE correos_aleatorios SET pais = '${pais}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+        let sql = `SELECT * FROM correos_aleatorios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
-        console.log(result);
 
-        if (pais == undefined) {
+        if (result.length == 0) {
 
-            message = 'Introduce un pais'
+            message = 'El usuario no existe'
             success = false
 
         } else {
+
+            sql = `UPDATE correos_aleatorios SET pais = '${pais}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+            result = await query(sql)
 
             message = 'Pais actualizado'
             success = true
@@ -345,19 +351,21 @@ async function eliminar (email, callback) {
 
     try {
 
-        let sql = `DELETE FROM correos_aleatorios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe)
-        let result = await query(sql)
-        console.log(result);
+        let sql = `SELECT * FROM correos_aleatorios WHERE email = '${email}'`         // SQL (Buscara si existe el email que introducen)
+        let result = await query(sql)        
 
-        if (result == email) {
+        if (result.length == 0) {
 
-            message = 'Se ha eliminado con exito'
-            success = true 
+            message = 'Usuario no encontrado'
+            success = false 
 
         } else {
 
-            message = 'El usuario introducido no existe'
-            success = false
+            sql = `DELETE FROM correos_aleatorios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe)
+            result = await query(sql)
+
+            message = 'Email eliminado con exito'
+            success = true
 
         } 
 
