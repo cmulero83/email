@@ -49,7 +49,7 @@ app.post('/altaUsuario', function(req, res, next){
 
 // --- ACTUALIZAR USUARIO ---
 
-app.put('/actualizarUsuario', function(req, res, next){
+app.post('/actualizarUsuario', function(req, res, next){
 
   var email = req.body.email
   var password = req.body.password

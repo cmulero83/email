@@ -13,7 +13,17 @@ body{
     color: white;
 }
 
+.volver-id{
+    padding: 0px 0px 20px 10px;
+}
+
 tr{
     text-align: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#volver{
+    font-size: 24px;
+    color: #626567;
+    
 }

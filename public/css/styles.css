@@ -57,10 +57,6 @@ h5{
     margin-top: 60px;
 }
 
-.link{
-    color: #48C9B0;
-}
-
 .logo{
     margin: 100px 0px;
     text-align: center;
@@ -89,4 +85,12 @@ h5{
     border-right: none;
 }
 
+#registro{
+    color: #48C9B0;
+}
 
+#volver{
+    font-size: 24px;
+    padding-left: 10px;
+    color: #626567;
+}

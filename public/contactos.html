@@ -18,53 +18,131 @@
 
         <script>
 
-            let data = {id_usuarios:"e1"}
+            $(document).ready(function(){
 
-            jQuery.ajax({
-                url:'/mostrar',
-                data: data,
-                type:'POST',
-                dataType: 'json'
-            }).then(function(response){
-                console.log(response);
+                let data = {id_usuarios:"e1"}
+
+                jQuery.ajax({
+
+                    url:'/mostrar',
+                    data: data,
+                    type:'POST',
+                    dataType: 'json'
+
+                }).then(function(response){
                 
-                
+                    for(i=0; i < response.length; i++) {
+
+                        // Creo la fila
+
+                        var fila = document.createElement('tr')
+                        fila.scope = 'row'
+                        fila.id = i
+
+                        // Creo columnas dentro de la fila
+
+                        var columna = document.createElement('td')
+                        //columna.id = 'col' + i
+                        //columna.name = 'col' + i
+                        columna.innerHTML = response[i].id
+
+                        // Creamos la columna 1 pondremos el nombre
+
+                        var columna1 = document.createElement('td')
+                        columna1.innerHTML = response[i].nombre
+
+                        // Creamos la columna 2 pondremos el apellido
+
+                        var columna2 = document.createElement('td')
+                        columna2.innerHTML = response[i].apellido
+
+                        // Creamos la columna 3 pondremos el email
+
+                        var columna3 = document.createElement('td')
+                        columna3.innerHTML = response[i].email
+
+                        // Creamos la columna 4 pondremos el pais
+
+                        var columna4 = document.createElement('td')
+                        columna4.innerHTML = response[i].pais
+
+                        // Creamos el boton editar
+
+                        var columnaEditar = document.createElement('td')
+                        columnaEditar.innerHTML = '<a class="btn btn-editar" href="./editar.html"><i class="bi bi-pencil"></i></button>'
+
+                        // Creamos el boton el boton eliminar
+
+                        var columnaEliminar = document.createElement('td')
+                        columnaEliminar.innerHTML = '<button id="btn-eliminar" class="btn btn-eliminar" onclick="eliminar(\''+response[i].email+'\')"><i class="bi bi-trash"></i></button>'
+
+                        // Añado los elementos
+
+                        document.getElementById('tbody').appendChild(fila)
+
+                        document.getElementById(i).appendChild(columna)
+                        document.getElementById(i).appendChild(columna1)
+                        document.getElementById(i).appendChild(columna2)
+                        document.getElementById(i).appendChild(columna3)
+                        document.getElementById(i).appendChild(columna4)
+                        document.getElementById(i).appendChild(columnaEditar)
+                        document.getElementById(i).appendChild(columnaEliminar)
+
+                    }   
+                })  
             })
+
+        </script>
+        <script>
+
+            // Dectamos actividad en los botones
+
+            const Url = 'http://localhost:3000/eliminar'
+            
+            function eliminar (posicion){
+                console.log(posicion);
+                $.post(Url, function(status) {
+                    console.log(status);
+                })
+            }
 
         </script>
 
     </head>
 
     <body>
-
         <section>
+
+            <div class="volver-id">
+                <a class="link" id="volver" href="./entrada.html"><i class="bi bi-arrow-left"></i></a>
+            </div>
+            
             <table class="table table-responsive table-dark table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col" >Nombre</th>
+                        <th scope="col">Nombre</th>
                         <th scope="col">Apellido</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Password</th>
                         <th scope="col">Pais</th>
                         <th scope="col">Actualizar</th>
                         <th scope="col">Eliminar</th>
 
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row" name="id">kk</th>
+                <tbody id="tbody" name="tbody">
+                    <tr id="ejemplo">
+                        <!-- <th scope="row" name="id">kk</th>
                         <td name="nombre">kk</td>
                         <td name="apellido">ll</td>
                         <td name="email">ll</td>
                         <td name="password">kk</td>
-                        <td name="pais">kk</td>
 
-                        <td><a class="btn btn-editar" href="./editar.html"><i class="bi bi-pencil"></i></button></td>
-                        <td><button class="btn btn-eliminar"><i class="bi bi-trash"></i></button></td>
+                        <td><a class="btn btn-editar" href="./editar.html"><i class="bi bi-pencil"></i></a></td>
+                        <td><button class="btn btn-eliminar"><i class="bi bi-trash"></i></button></td> -->
 
-                    </tr>
+                    </tr> 
+                    
                 </tbody>
 
             </table>
