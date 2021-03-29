@@ -79,6 +79,12 @@ h5{
     border-right: none;
 }
 
+#pais{
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
 #empresa{
     border-top: none;
     border-left: none;
@@ -93,4 +99,10 @@ h5{
     font-size: 24px;
     padding-left: 10px;
     color: #626567;
+}
+
+#dropdown {
+    font-size: 30px;
+    color: #626567;
+    padding: 15px;
 }

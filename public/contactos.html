@@ -14,100 +14,9 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js "></script>
         <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
     
-        <title>Document</title>
+        <title>Correos</title>
 
-        <script>
-
-            $(document).ready(function(){
-
-                let data = {id_usuarios:"e1"}
-
-                jQuery.ajax({
-
-                    url:'/mostrar',
-                    data: data,
-                    type:'POST',
-                    dataType: 'json'
-
-                }).then(function(response){
-                    console.log(response);
-                    for(i=0; i < response.length; i++) {
-                        
-
-                        // Creo la fila
-
-                        var fila = document.createElement('tr')
-                        fila.scope = 'row'
-                        fila.id = i
-
-                        // Creo columnas dentro de la fila
-
-                        var columna = document.createElement('td')
-                        //columna.id = 'col' + i
-                        //columna.name = 'col' + i
-                        columna.innerHTML = response[i].id
-
-                        // Creamos la columna 1 pondremos el nombre
-
-                        var columna1 = document.createElement('td')
-                        columna1.innerHTML = response[i].nombre
-
-                        // Creamos la columna 2 pondremos el apellido
-
-                        var columna2 = document.createElement('td')
-                        columna2.innerHTML = response[i].apellido
-
-                        // Creamos la columna 3 pondremos el email
-
-                        var columna3 = document.createElement('td')
-                        columna3.innerHTML = response[i].email
-
-                        // Creamos la columna 4 pondremos el pais
-
-                        var columna4 = document.createElement('td')
-                        columna4.innerHTML = response[i].pais
-
-                        // Creamos el boton editar
-
-                        var columnaEditar = document.createElement('td')
-                        columnaEditar.innerHTML = '<a class="btn btn-editar" href="./editar.html"><i class="bi bi-pencil"></i></button>'
-
-                        // Creamos el boton el boton eliminar
-
-                        var columnaEliminar = document.createElement('td')
-                        columnaEliminar.innerHTML = '<button id="btn-eliminar" class="btn btn-eliminar" onclick="eliminar(\''+response[i].email+'\')"><i class="bi bi-trash"></i></button>'
-
-                        // Añado los elementos
-
-                        document.getElementById('tbody').appendChild(fila)
-
-                        document.getElementById(i).appendChild(columna)
-                        document.getElementById(i).appendChild(columna1)
-                        document.getElementById(i).appendChild(columna2)
-                        document.getElementById(i).appendChild(columna3)
-                        document.getElementById(i).appendChild(columna4)
-                        document.getElementById(i).appendChild(columnaEditar)
-                        document.getElementById(i).appendChild(columnaEliminar)
-
-                    }   
-                })  
-            })
-
-        </script>
-        <script>
-
-            // Dectamos actividad en los botones
-
-            const Url = 'http://localhost:3000/eliminar'
-            
-            function eliminar (posicion){
-                console.log(posicion);
-                $.post(Url, function(status) {
-                    console.log(status);
-                })
-            }
-
-        </script>
+        <script type="text/javascript" src="./scriptConctacto.js"></script>
 
     </head>
 
@@ -116,6 +25,60 @@
 
             <div class="volver-id">
                 <a class="link" id="volver" href="./entrada.html"><i class="bi bi-arrow-left"></i></a>
+                
+                <!-- Agregar un nuevo usuario -->
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class=" agregar me-md-2 " type="button" data-bs-toggle="modal" data-bs-target="#agregar">Agregar nuevo usuario</button>
+
+                    <div class="modal fade" id="agregar" tabindex="-1" aria-labelledby="agregar" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/alta" method="POST">
+                                        <h2>Agregar un nuevo usuario</h2>
+
+                                        <div class="col-auto">
+                                          <label for="exampleInputEmail1" class="form-label" for="inputPassword6">Id</label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="string" class="form-control" id="exampleInputEmail1" for="inputPassword6" name="id">
+                                        </div>
+                                        <div class="mb-3">
+                                          <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                                          <input type="string" class="form-control" id="exampleInputEmail1" name="nombre">
+                                        </div>
+                                        <div class="mb-3">
+                                          <label for="exampleInputEmail1" class="form-label">Apellido</label>
+                                          <input type="string" class="form-control" id="exampleInputEmail1" name="apellido">
+                                        </div>
+                                        <div class="mb-3">
+                                          <label for="exampleInputEmail1" class="form-label">Email</label>
+                                          <input type="email" class="form-control" id="exampleInputEmail1" name="email">
+                                        </div>
+                                        <div class="mb-3">
+                                          <label for="exampleInputEmail1" class="form-label">Pais</label>
+                                          <input type="string" class="form-control" id="exampleInputEmail1" name="pais">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">ID_usuarios</label>
+                                            <input type="string" class="form-control" id="exampleInputEmail1" name="id_usuarios">
+                                          </div><br>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="agregado">Agregar</button>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             
             <table class="table table-responsive table-dark table-striped">
@@ -131,18 +94,8 @@
 
                     </tr>
                 </thead>
-                <tbody id="tbody" name="tbody">
-                    <tr id="ejemplo">
-                        <!-- <th scope="row" name="id">kk</th>
-                        <td name="nombre">kk</td>
-                        <td name="apellido">ll</td>
-                        <td name="email">ll</td>
-                        <td name="password">kk</td>
 
-                        <td><a class="btn btn-editar" href="./editar.html"><i class="bi bi-pencil"></i></a></td>
-                        <td><button class="btn btn-eliminar"><i class="bi bi-trash"></i></button></td> -->
-
-                    </tr> 
+                <tbody id="tbody" name="tbody"> 
                     
                 </tbody>
 

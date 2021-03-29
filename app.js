@@ -22,7 +22,7 @@ app.use(morgan('dev'))
 
 app.use(express.static('public'))
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`El puerto se esta escuchando por: http://localhost:${port}`)
 })
 
@@ -123,8 +123,9 @@ app.post('/alta', function(req, res, next){
   var nombre = req.body.nombre
   var apellido = req.body.apellido
   var pais = req.body.pais
+  var id_usuarios = req.body.id_usuarios
 
-  crudPromesas.alta(id, email, nombre, apellido, pais, function(test){
+  crudPromesas.alta(id, email, nombre, apellido, pais, id_usuarios, function(test){
     
     console.log(JSON.stringify(test));
     return  res.status(200).json(test)
@@ -166,6 +167,7 @@ app.post('/mostrar', function(req, res, next){
 app.post('/eliminar', function(req, res, next){
       
   var email = req.body.email
+  console.log(req.body.email);
 
   crudPromesas.eliminar(email, function(test){
     

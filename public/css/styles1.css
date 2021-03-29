@@ -13,6 +13,28 @@ body{
     color: white;
 }
 
+.btn-cancelar{
+    background-color: #48C9B0;
+    color: white;
+}
+
+.agregar{
+    background-color:  rgb(34, 37, 41);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.agregado{
+    padding: 5px 10px;
+    border-radius: 6px;
+    background-color:  rgb(34, 37, 41);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .volver-id{
     padding: 0px 0px 20px 10px;
 }
@@ -26,4 +48,35 @@ tr{
     font-size: 24px;
     color: #626567;
     
+}
+
+#titulo-borrar{
+    color: #DC143C;
+    padding: 10px 0px;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#titulo-editar{
+    color:#F39C12;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#exampleInputEmail1{
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+label{
+    color: black;
+}
+
+h2{
+    color: black;
+    text-align: center;
+    padding: 10px 0px 15px 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

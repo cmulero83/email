@@ -202,7 +202,7 @@ async function eliminarUsuario (email, callback) {
 
 // --- CRUD ALTA USUARIO ---
 
-async function alta (id, email, nombre, apellido, pais, callback) {
+async function alta (id, email, nombre, apellido, pais, id_usuarios, callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -217,7 +217,7 @@ async function alta (id, email, nombre, apellido, pais, callback) {
     
     try {
 
-        sql = `INSERT INTO correos_aleatorios (id, email, nombre, apellido, pais) VALUES ('${id}','${email}', '${nombre}', '${apellido}', '${pais}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
+        sql = `INSERT INTO correos_aleatorios (id, email, nombre, apellido, pais, id_usuarios) VALUES ('${id}','${email}', '${nombre}', '${apellido}', '${pais}', '${id_usuarios}')`            // SQL (En caso de que no exista va insertar los varoles en la DB)
         let result = await query(sql)
         console.log(result);
 
@@ -235,7 +235,7 @@ async function alta (id, email, nombre, apellido, pais, callback) {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`,'id':`${id}`, 'email':`${email}`, 'nombre':`${nombre}`, 'apellido':`${apellido}`, 'pais':`${pais}`})
+        callback({'success':`${success}`, 'message':`${message}`,'id':`${id}`, 'email':`${email}`, 'nombre':`${nombre}`, 'apellido':`${apellido}`, 'pais':`${pais}`, 'id_usuarios':`${id_usuarios}`})
 
     }
 }
