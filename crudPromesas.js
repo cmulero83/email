@@ -292,7 +292,7 @@ async function mostrar (id_usuarios, callback) {
 
 // --- CRUD ACTUALIZAR USUARIO ---
 
-async function actualizar (email, pais, callback) {
+async function actualizar (nombre, apellido ,email, pais, callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -315,10 +315,10 @@ async function actualizar (email, pais, callback) {
 
         } else {
 
-            sql = `UPDATE correos_aleatorios SET pais = '${pais}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
+            sql = `UPDATE correos_aleatorios SET nombre = '${nombre}', apellido = '${apellido}', pais = '${pais}' WHERE email = '${email}'`           // SQL (Actualizaremos la contraseña del email introducido)
             result = await query(sql)
 
-            message = 'Pais actualizado'
+            message = 'Actualizado con exito'
             success = true
         }
 
@@ -331,7 +331,7 @@ async function actualizar (email, pais, callback) {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'pais':`${pais}`})
+        callback({'success':`${success}`, 'message':`${message}`, 'nombre':`${nombre}`, 'apellido':`${apellido}` , 'email':`${email}`, 'pais':`${pais}`})
 
     }
 } 
@@ -362,6 +362,7 @@ async function eliminar (email, callback) {
         } else {
 
             sql = `DELETE FROM correos_aleatorios WHERE email = '${email}'`           // Instruccion SQL (Eliminara el email introducido si existe)
+            console.log(sql);
             result = await query(sql)
 
             message = 'Email eliminado con exito'

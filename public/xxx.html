@@ -1,136 +1,124 @@
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
-        <link href="/css/styles.css" rel="stylesheet">
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-
-        <title>Correos</title>
-
-    </head>
-
-    <body>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    <link href="/css/styles.css" rel="stylesheet">
         
-        <section class="container">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js "></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 
-            <!-- <a class="link" id="volver" href="./contactos.html"><i class="bi bi-arrow-left"></i></a>
+    <script>
+      
+      $(document).ready(function(){
+        $('#modal_editar').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id')
+        var nombre = button.data('nombre')
+        var apellido = button.data('apellido')
+        var email = button.data('email')
+        var pais = button.data('pais') // Extract info from data-* attributes
+       
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-body #InputId').val(id)
+        modal.find('.modal-body #InputNombre').val(nombre)
+        modal.find('.modal-body #InputApellido').val(apellido)
+        modal.find('.modal-body #InputEmail').val(email)
+        modal.find('.modal-body #InputPais').val()
+        })
+      })
+      
+      function eliminar(emial) {
+        alert('lpkcojsihubhvjnjij')
+      }
+      
+    
 
-            <form action="/actualizar" method="POST"><h2>Editar contacto</h2>
+    </script>
+      
+    <title>Correos</title>
 
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
-                  <label for="floatingInput">Email</label>
-                </div>
-                
-                <div class="form-floating mb-3">
-                  <input type="varchar" class="form-control" id="pais" name="pais" placeholder="Pais">
-                  <label for="floatingPais">Pais</label>
-                </div>
-        
-                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                  <input class="btn" type="submit" value="Editar">
-                </div> 
-            </form>-->
-            <div></div> <br>
-              
-            
+  </head>
+  
+  <body>
+    
+    <section class="container">
 
-            <button type="button"  class="btn btn-editar" data-bs-toggle="modal" data-bs-target="#modal_editar">
-              <i class="bi bi-pencil"></i>
-            </button>
-            <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="editar" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <h2>Editar registro</h2>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Id</label>
-                        <input type="string" value='+response[i].id+' class="form-control" id="exampleInputEmail1" name="id">
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Nombre</label>
-                        <input type="string" value='+response[i].nombre+' class="form-control" id="exampleInputEmail1" name="nombre">
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Apellido</label>
-                        <input type="string" value='+response[i].apellido+' class="form-control" id="exampleInputEmail1" name="apellido">
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email</label>
-                        <input type="email" value='+response[i].email+' class="form-control" id="exampleInputEmail1" name="email">
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Pais</label>
-                        <input type="string" value='+response[i].pais+' class="form-control" id="exampleInputEmail1" name="pais">
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-editar">Actualizar</button>
-                  </div>
-                </div>
-              </div>
+      <!-- <button class="btn btn-editar me-md-2 " type="button" data-bs-toggle="modal" data-bs-target="#modal_editar" data-id= "32" data-nombre="alba" data-apellido="Mulero" data-email="alba@gmail.com" data-pais="España">
+        <i class="bi bi-pencil"></i>
+      </button>
+      <div class="modal fade" id="modal_editar" tabindex="-1" aria-labelledby="editar" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button class="editar me-md-2 " type="button" onclick="actualizar(\''+response[i].id+'\', \''+response[i].nombre+'\', \''+response[i].apellido+'\',\''+response[i].email+'\', \''+response[i].pais+'\')" data-bs-toggle="modal" data-bs-target="#editar"><i class="bi bi-pencil"></i></button>
-
-              <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="editar" aria-hidden="true">
-                  <div class="modal-dialog">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                          </div>
-                          <div class="modal-body">
-                              <form action="/actualizar" method="POST">
-                                  <h2>Editar usuario</h2>
-                                  <div class="col-auto">
-                                    <label for="exampleInputEmail1" class="form-label" for="inputPassword6">Id</label>
-                                  </div>
-                                  <div class="mb-3">
-                                      <input type="string" class="form-control" id="exampleInputEmail1" for="inputPassword6" value="response[i].id" name="id">
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Nombre</label>
-                                    <input type="string" class="form-control" id="exampleInputEmail1" name="nombre" value="response[i].nombre">
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Apellido</label>
-                                    <input type="string" class="form-control" id="exampleInputEmail1" name="apellido" value="response[i].apellido">
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="response[i].email">
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Pais</label>
-                                    <input type="string" class="form-control" id="exampleInputEmail1" name="pais" value="response[i].pais">
-                                  </div><br>
-                                  <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                      <button type="submit" class="editar">Editar</button>
-                                  </div> 
-                              </form>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+            <div class="modal-body">
+              <form action="/actualizar" method="POST">
+                <h2>Editar usuario</h2>
+                <div class="col-auto">
+                  <label for="exampleInputEmail1" class="form-label" for="inputPassword6">Id</label>
+                </div>
+                <div class="mb-3">
+                  <input type="string" class="form-control" id="InputId" for="inputPassword6"  name="id">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                  <input type="string" class="form-control" id="InputNombre" name="nombre">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Apellido</label>
+                  <input type="string" class="form-control" id="InputApellido" name="apellido">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="InputEmail" name="email">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Pais</label>
+                  <input type="string" class="form-control" id="InputPais" name="pais">
+                </div>
+                <br>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-editar">Editar</button>
+                </div>
+              </form>
+            </div>
           </div>
+        </div>
+      </div> -->
 
-        
-              
+<button type="button" class="btn btn-eliminar" data-bs-toggle="modal" data-bs-target="#borrar" onclick="eliminar('+response[i].emial+')">
+  <i class="bi bi-trash"></i>
+</button>
+<div class="modal fade" id="borrar" tabindex="-1" aria-labelledby="borrar" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+      </div>
+      <div class="modal-body">
+        <h5 id="titulo-borrar">¿Seguro que desea eliminar?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-eliminar">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        </section>
-        
-    </body>
+
+
+
+
+    </section>
+  
+  </body>
 </html>

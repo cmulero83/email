@@ -137,10 +137,12 @@ app.post('/alta', function(req, res, next){
 
 app.post('/actualizar', function(req, res, next){
 
+  var nombre = req.body.nombre
+  var apellido = req.body.apellido
   var email = req.body.email
   var pais = req.body.pais
 
-  crudPromesas.actualizar(email, pais, function(test){
+  crudPromesas.actualizar(nombre, apellido, email, pais, function(test){
     
     console.log(JSON.stringify(test));
     return  res.status(200).json(test)
