@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
-    <script type="text/javascript">  
-    
-    $(document).ready(function() {
+$(document).ready(function() {
 
     // The event listener for the file upload
     document.getElementById('txtFileUpload').addEventListener('change', upload, false);
@@ -71,16 +65,5 @@
                     alert('Unable to read ' + file.fileName);
                 };
             }
-        }
-    });
-</script>
-    </head>
-    <body>
-        <div id="dvImportSegments" class="fileupload ">
-    <fieldset>
-        <legend>Upload your CSV File</legend>
-        <input type="file" name="File Upload" id="txtFileUpload" accept=".csv" />
-    </fieldset>
-    </div>
-    </body>
-</html>
+        } 
+});

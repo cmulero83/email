@@ -27,6 +27,15 @@ body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.importar-csv {
+    background-color:  rgb(34, 37, 41);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .agregado{
     padding: 5px 10px;
     border-radius: 6px;
@@ -70,6 +79,10 @@ tr{
     border-right: none;
 }
 
+#txtFileUpload{
+    padding: 5px;
+}
+
 label{
     color: black;
 }
@@ -77,6 +90,6 @@ label{
 h2{
     color: black;
     text-align: center;
-    padding: 10px 0px 15px 0px;
+    padding: 10px 0px 20px 0px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

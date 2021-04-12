@@ -41,7 +41,7 @@ app.post('/altaUsuario', function(req, res, next){
   
   crudPromesas.altaUsuario(email, password, id, empresa, function(test){
 
-    console.log(JSON.stringify(test));
+    //console.log(JSON.stringify(test));
     return  res.status(200).json(test)
 
   })

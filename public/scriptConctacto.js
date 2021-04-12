@@ -54,7 +54,7 @@ $(document).ready(function(){
             // Creamos el boton el boton eliminar
 
             var columnaEliminar = document.createElement('td')
-            columnaEliminar.innerHTML = '<button type="button" class="btn btn-eliminar" data-bs-toggle="modal" data-bs-target="#borrar"><i class="bi bi-trash"></i></button><div class="modal fade" id="borrar" tabindex="-1" aria-labelledby="borrar" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button></div><div class="modal-body"><h5 id="titulo-borrar">¿Seguro que desea eliminar?</h5<br></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-eliminar" onclick="eliminar(\''+response[i].email+'\')">Aceptar</button></div></div></div></div>'
+            columnaEliminar.innerHTML = '<button type="button" class="btn btn-eliminar" data-bs-toggle="modal" data-bs-target="#borrar" data-email ='+response[i].email+'><i class="bi bi-trash"></i></button><div class="modal fade" id="borrar" tabindex="-1" aria-labelledby="borrar" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button></div><div class="modal-body"><h5 id="titulo-borrar">¿Seguro que desea eliminar?</h5><input type="hidden" id="oculto_email"><br></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-eliminar"  id="eliminar">Aceptar</button></div></div></div></div>'
 
             // Añado los elementos
 
@@ -85,7 +85,25 @@ $(document).ready(function(){
             modal.find('.modal-body #InputApellido').val(apellido)
             modal.find('.modal-body #InputEmail').val(email)
             modal.find('.modal-body #InputPais').val(pais)
-        }) 
+        })
+        
+        /* BORRAR */
+
+        $('#borrar').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var email = button.data('email')
+            console.log(email);
+            var modal = $(this)
+            modal.find('.modal-body #oculto_email').val(email)
+            
+        })
+
+        $('#eliminar').click(function(){
+            /* alert('probando.....')
+            alert($('#oculto_email').val()) */
+            eliminar($('#oculto_email').val())
+        })
+        
     }) 
 })
 

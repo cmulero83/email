@@ -55,6 +55,7 @@ async function altaUsuario (email, password, id, empresa, callback) {
 
         callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'password':`${password}`, 'id':`${id}`, 'empresa':`${empresa}`})
 
+
     }
 }
 
@@ -202,7 +203,10 @@ async function eliminarUsuario (email, callback) {
 
 // --- CRUD ALTA USUARIO ---
 
-async function alta (id, email, nombre, apellido, pais, id_usuarios, callback) {
+async function alta ( id, email, nombre, apellido, pais, id_usuarios, callback) {
+
+    // Generar el id del usuario
+    id = makeid.makeid()
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -236,7 +240,8 @@ async function alta (id, email, nombre, apellido, pais, id_usuarios, callback) {
         conexion.end()
 
         callback({'success':`${success}`, 'message':`${message}`,'id':`${id}`, 'email':`${email}`, 'nombre':`${nombre}`, 'apellido':`${apellido}`, 'pais':`${pais}`, 'id_usuarios':`${id_usuarios}`})
-
+        
+        
     }
 }
 
