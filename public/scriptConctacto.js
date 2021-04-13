@@ -99,12 +99,10 @@ $(document).ready(function(){
         })
 
         $('#eliminar').click(function(){
-            /* alert('probando.....')
-            alert($('#oculto_email').val()) */
             eliminar($('#oculto_email').val())
         })
         
-    }) 
+    })
 })
 
 /* BORRAR */

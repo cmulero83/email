@@ -55,7 +55,6 @@ async function altaUsuario (email, password, id, empresa, callback) {
 
         callback({'success':`${success}`, 'message':`${message}`, 'email':`${email}`, 'password':`${password}`, 'id':`${id}`, 'empresa':`${empresa}`})
 
-
     }
 }
 
