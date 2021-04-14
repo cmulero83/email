@@ -244,7 +244,7 @@ async function alta ( id, email, nombre, apellido, pais, id_usuarios, callback) 
     }
 }
 
-// --- CRUS MOSTAR USAURIO ---
+// --- CRUD MOSTAR USUARIO ---
 
 async function mostrar (id_usuarios, callback) {
 

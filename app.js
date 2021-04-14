@@ -102,7 +102,7 @@ app.post('/webservice/login', function(req, res, next){
   login.login(email, password, function(test){
 
     // Creamos una sesion para este usuario
-    req.session.user_id = email
+    req.session.user_id = test.id
     console.log('sesion : ' + req.session.user_id)
 
     //Ejercicio, que se genere la sesion SOLO si se tuvo exito en la busqueda del usuario, es decir si exite....
@@ -123,7 +123,10 @@ app.post('/alta', function(req, res, next){
   var nombre = req.body.nombre
   var apellido = req.body.apellido
   var pais = req.body.pais
-  var id_usuarios = req.body.id_usuarios
+  
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
 
   crudPromesas.alta(id, email, nombre, apellido, pais, id_usuarios, function(test){
     
@@ -154,11 +157,13 @@ app.post('/actualizar', function(req, res, next){
 
 app.post('/mostrar', function(req, res, next){
   
-  var id_usuarios = req.body.id_usuarios
-  console.log(req.body);
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en mostar : "+ session.user_id);
+
   crudPromesas.mostrar(id_usuarios, function(test){
   
-    console.log(JSON.stringify(test));
+    //console.log(JSON.stringify(test));
     return  res.status(200).json(test)
   })
 

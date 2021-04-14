@@ -1,17 +1,19 @@
 $(document).ready(function(){
 
-    let data = {id_usuarios:"e1"}
+    //let data = {id_usuarios:"e1"}
+    //let data = {id_usuarios:`${req.session.user_id}`}
+
 
     jQuery.ajax({
 
         url:'/mostrar',
-        data: data,
+        //data: data,
         type:'POST',
         dataType: 'json'
 
     }).then(function(response){
 
-        console.log(response);
+        console.log('Response:' , response);
         
         for(i=0; i < response.length; i++) {
             
