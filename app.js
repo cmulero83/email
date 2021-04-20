@@ -26,8 +26,9 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`El puerto se esta escuchando por: http://localhost:${port}`)
 })
 
-
-//  RUTAS + CRUD CON PROMESAS
+/////////////////////////////////
+//  RUTAS + CRUD CON PROMESAS  //
+////////////////////////////////
 
 // --- ALTA USUARIO ---
 
@@ -41,7 +42,7 @@ app.post('/altaUsuario', function(req, res, next){
   
   crudPromesas.altaUsuario(email, password, id, empresa, function(test){
 
-    //console.log(JSON.stringify(test));
+    console.log(JSON.stringify(test));
     return  res.status(200).json(test)
 
   })
@@ -92,27 +93,9 @@ app.delete('/eliminarUsuario', function(req, res, next){
  
 })
 
-// --- LOGIN ---
-
-app.post('/webservice/login', function(req, res, next){
-  
-  var email = req.body.email
-  var password = req.body.password
-
-  login.login(email, password, function(test){
-
-    // Creamos una sesion para este usuario
-    req.session.user_id = test.id
-    console.log('sesion : ' + req.session.user_id)
-
-    //Ejercicio, que se genere la sesion SOLO si se tuvo exito en la busqueda del usuario, es decir si exite....
-
-    console.log(JSON.stringify(test));
-    return res.status(200).json(test)
-  })
-})
-
-// RUTAS + CRUD CORREO ALEATORIOS
+////////////////////////////////////
+// RUTAS + CRUD CORREO ALEATORIOS //
+///////////////////////////////////
 
 // --- ALTA USUARIO ---
 
@@ -163,7 +146,7 @@ app.post('/mostrar', function(req, res, next){
 
   crudPromesas.mostrar(id_usuarios, function(test){
   
-    //console.log(JSON.stringify(test));
+    console.log(JSON.stringify(test));
     return  res.status(200).json(test)
   })
 
@@ -183,6 +166,104 @@ app.post('/eliminar', function(req, res, next){
 
   })
  
+})
+
+///////////////////////////////////////
+// RUTAS + CRUD CONFIGURACION EMAIL //
+/////////////////////////////////////
+
+// --- ALTA CONFIGURACION EMAIL ---
+
+app.post('/alta_config_email', function(req, res, next){
+
+  var hostConfig = req.body.hostConfig
+  var portConfig = req.body.portConfig
+  var emailConfig = req.body.emailConfig
+  var smtpencrytionConfig = req.body.smtpencrytionConfig
+  var smptauthencationConfig = req.body.smptauthencationConfig
+  var usernameConfig = req.body.usernameConfig
+  var passwordConfig = req.body.passwordConfig
+  
+  let session = req.session
+  var id_usuarios = session.user_id
+
+  crudPromesas.alta_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig, id_usuarios, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
+// --- ACTUALIZAR USUARIO ---
+
+app.post('/actualizar_config_email', function(req, res, next){
+
+  var hostConfig = req.body.hostConfig
+  var portConfig = req.body.portConfig
+  var emailConfig = req.body.emailConfig
+  var smtpencrytionConfig = req.body.smtpencrytionConfig
+  var smptauthencationConfig = req.body.smptauthencationConfig
+  var usernameConfig = req.body.usernameConfig
+  var passwordConfig = req.body.passwordConfig
+
+  let session = req.session
+  var id_usuarios = session.user_id
+
+  crudPromesas.actualizar_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig, id_usuarios, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  }) 
+})
+
+// --- MOSTRAR USUARIO ---
+
+app.post('/mostrar_config_email', function(req, res, next){
+  
+  let session = req.session
+  var id_usuarios = session.user_id
+
+  crudPromesas.mostrar_config_email(id_usuarios, function(test){
+  
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+  })
+
+})
+
+/////////////
+// SESION //
+///////////
+
+// --- LOGIN ---
+
+app.post('/webservice/login', function(req, res, next){
+  
+  var email = req.body.email
+  var password = req.body.password
+
+  login.login(email, password, function(test){
+
+    // Creamos una sesion para este usuario
+    req.session.user_id = test.id
+    console.log('sesion : ' + req.session.user_id)
+
+    //Ejercicio, que se genere la sesion SOLO si se tuvo exito en la busqueda del usuario, es decir si exite....
+
+    console.log(JSON.stringify(test));
+    return res.status(200).json(test)
+  })
+})
+
+// --- LOGOUT ---
+
+app.get('/logout', function(req, res, next) {
+  
+  req.session.destroy();    // Destruimos la sesion 
+  res.send("logout success!");
+
 })
 
 

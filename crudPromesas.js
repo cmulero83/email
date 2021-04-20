@@ -12,6 +12,9 @@ let database_name = 'mailshi1_alba'
 let database_user = 'mailshi1_alba'
 let database_password = 'Suerte05alba'
 
+/////////////////////////
+// CRUD ALTA USUARIOS //
+///////////////////////
 
 // --- CRUD ALTA USUARIO ---
 
@@ -198,7 +201,9 @@ async function eliminarUsuario (email, callback) {
     }
 }
 
-// CRUD CORREO ALEATORIO
+///////////////////////////
+// CRUD CORREO ALEATORIO //
+//////////////////////////
 
 // --- CRUD ALTA USUARIO ---
 
@@ -388,6 +393,120 @@ async function eliminar (email, callback) {
     }
 }
 
+///////////////////////////////
+// CRUD CONFIGURACION EMAIL //
+/////////////////////////////
+
+async function alta_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, id_usuarios, passwordConfig, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user:database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a ls DB
+
+    try {
+
+        let sql = `INSERT INTO SMPT_configuracion (hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig) VALUES ('${hostConfig}','${portConfig}', '${emailConfig}', '${smtpencrytionConfig}', '${smptauthencationConfig}', '${usernameConfig}', '${passwordConfig}', '${id_usuarios}')`
+        let result = await query(sql)
+
+        message = 'Se ha realizado la operacion con exito'
+        success = true
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        conexion.end()
+
+        callback({'success':`${success}`, 'message':`${message}`, 'hostConfig':`${hostConfig}`, 'portConfig':`${portConfig}`, 'emailConfig':`${emailConfig}`, 'smtpencrytionConfig':`${smtpencrytionConfig}`, 'smptauthencationConfig':`${smptauthencationConfig}`, 'usernameConfig':`${usernameConfig}`, 'passwordConfig':`${passwordConfig}`, 'id_usuarios':`${id_usuarios}`})
+        
+    }
+}
+
+async function actualizar_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig, id_usuarios, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user:database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a ls DB
+
+    try {
+
+        let sql = `UPDATE SMPT_configuracion SET hostConfig = '${hostConfig}', portConfig = '${portConfig}', emailConfig = '${emailConfig}', smtpencrytionConfig = '${smtpencrytionConfig}', smptauthencationConfig = '${smptauthencationConfig}', usernameConfig = '${usernameConfig}', passwordConfig = '${passwordConfig}', id_usuarios = '${id_usuarios}' `
+        let result = await query(sql)
+
+        message = 'Actualizado con exito'
+        success = true
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        callback({'success':`${success}`, 'message':`${message}`, 'hostConfig':`${hostConfig}`, 'portConfig':`${portConfig}`, 'emailConfig':`${emailConfig}`, 'smtpencrytionConfig':`${smtpencrytionConfig}`, 'smptauthencationConfig':`${smptauthencationConfig}`, 'usernameConfig':`${usernameConfig}`, 'passwordConfig':`${passwordConfig}`, 'id_usuarios':`${id_usuarios}`})
+
+    }    
+
+}
+
+async function mostrar_config_email(id_usuarios, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user:database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a ls DB
+
+    try {
+
+        let sql = `SELECT * FROM SMPT_configuracion WHERE id_usuarios = '${id_usuarios}`
+        console.log("Sentencia SQL", sql);
+        let result = await query(sql)
+        
+        console.log("Result" ,result);
+
+        if (result.length == 0) {
+
+            message = 'El formulario esta vacio'
+            success = false
+        
+        } else {
+
+            message = 'El formulario esta completo'
+            success = true
+        }
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        conexion.end()
+
+        callback({'success':`${success}`, 'message':`${message}`})
+        
+    }
+    
+}
+
 
 module.exports = {
     'altaUsuario' : altaUsuario,
@@ -397,5 +516,8 @@ module.exports = {
     'alta' : alta,
     'actualizar' : actualizar,
     'mostrar' : mostrar,
-    'eliminar' : eliminar
+    'eliminar' : eliminar,
+    'alta_config_email' : alta_config_email,
+    'actualizar_config_email' : actualizar_config_email,
+    'mostrar_config_email' : mostrar_config_email
 }

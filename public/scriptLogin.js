@@ -12,15 +12,7 @@ $(document).ready(function() {
     $('#boton-login').click(function(e) {
         login(e)
     })
-
-    $('#btn_modal_exito_login').click(function() {
-        $(location).attr("href", "/entrada.html");
-    })
     
-    $('#btn_modal_error_login').click(function() {
-        $(location).attr("href", "/index.html");
-    })
-
     ////////////////////////////////
     // Autor. Alba Mulero
     // Fecha creacion: 13/04/2021
@@ -52,15 +44,24 @@ $(document).ready(function() {
 
             if(response.success == "true") {
                 console.log("success es True")
-    
-                // Levantamos el modal de exito 
-                $('#modal_login_exito').modal('show')
-    
+                
+                $(location).attr("href", "/entrada.html");
+
             }else {
                 console.log("success es False")
-    
-                // Levantamos el modal de error
-                $('#modal_login_error').modal('show')
+
+                // Levantamos el modal de exito 
+                $('#modal_login').modal('show')
+
+                let mensaje = 'Lo sentimos.. Por favor compuebe login y password'
+
+                // Aqui hacemos que se oueda ver el nesaje que queremos mostrar
+                $('#modal_login').find('.modal-body p').text(mensaje)
+        
+                // Ponemos el boton a la escucha del modal y redirigimos a la pag
+                $('#btn_modal_login').click(function() {
+                    $(location).attr("href", "/index.html");
+                })
             }
         
         }).catch(function(e) {
