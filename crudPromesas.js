@@ -4,6 +4,7 @@ const util = require('util')
 
 const makeid = require('./utilidades/util')
 const nodemail = require('./nodemail')
+const { response } = require('express')
 
 // Conectamos a la DB y defenimos los valores
 
@@ -269,8 +270,7 @@ async function mostrar (id_usuarios, callback) {
 
         if (result.length == 0) {
 
-            message = 'Correo no encontrado'
-            success = false 
+            message = 'Correo no encontrado' 
             resultado = null
             
         } else {
@@ -397,7 +397,7 @@ async function eliminar (email, callback) {
 // CRUD CONFIGURACION EMAIL //
 /////////////////////////////
 
-async function alta_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, id_usuarios, passwordConfig, callback) {
+async function alta_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig, id_usuarios,  callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -410,13 +410,16 @@ async function alta_config_email(hostConfig, portConfig, emailConfig, smtpencryt
 
     try {
 
-        let sql = `INSERT INTO SMPT_configuracion (hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig) VALUES ('${hostConfig}','${portConfig}', '${emailConfig}', '${smtpencrytionConfig}', '${smptauthencationConfig}', '${usernameConfig}', '${passwordConfig}', '${id_usuarios}')`
+        const hash = bcrypt.hashSync(passwordConfig, 10)       // Encriptamos el password
+        console.log(hash);
+
+        let sql = `INSERT INTO SMPT_configuracion (host, port, send_mail, SMTP_encryption, SMTP_authentication, username, password, id_usuarios) VALUES ('${hostConfig}','${portConfig}', '${emailConfig}', '${smtpencrytionConfig}', '${smptauthencationConfig}', '${usernameConfig}', '${hash}', '${id_usuarios}')`
         let result = await query(sql)
 
         message = 'Se ha realizado la operacion con exito'
         success = true
 
-    } catch (err) {
+    } catch(err) {
 
         message = err.sqlMessage
         success = false
@@ -443,8 +446,8 @@ async function actualizar_config_email(hostConfig, portConfig, emailConfig, smtp
 
     try {
 
-        let sql = `UPDATE SMPT_configuracion SET hostConfig = '${hostConfig}', portConfig = '${portConfig}', emailConfig = '${emailConfig}', smtpencrytionConfig = '${smtpencrytionConfig}', smptauthencationConfig = '${smptauthencationConfig}', usernameConfig = '${usernameConfig}', passwordConfig = '${passwordConfig}', id_usuarios = '${id_usuarios}' `
-        let result = await query(sql)
+        let sql = `UPDATE SMPT_configuracion SET host = '${hostConfig}', port = '${portConfig}', send_mail = '${emailConfig}', SMTP_encryption = '${smtpencrytionConfig}', SMTP_authentication = '${smptauthencationConfig}', username = '${usernameConfig}', password = '${passwordConfig}', id_usuarios = '${id_usuarios}' `
+        await query(sql)
 
         message = 'Actualizado con exito'
         success = true
@@ -475,7 +478,7 @@ async function mostrar_config_email(id_usuarios, callback) {
 
     try {
 
-        let sql = `SELECT * FROM SMPT_configuracion WHERE id_usuarios = '${id_usuarios}`
+        let sql = `SELECT * FROM SMPT_configuracion WHERE id_usuarios = '${id_usuarios}'`
         console.log("Sentencia SQL", sql);
         let result = await query(sql)
         
@@ -484,13 +487,182 @@ async function mostrar_config_email(id_usuarios, callback) {
         if (result.length == 0) {
 
             message = 'El formulario esta vacio'
-            success = false
+            resultado = result
         
         } else {
 
             message = 'El formulario esta completo'
             success = true
+
+            resultado = result
+            console.log(resultado);
         }
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+        resultado = null
+
+    } finally {
+
+        conexion.end()
+        
+        callback(resultado)
+        
+    }
+    
+}
+
+/////////////////////////
+// CRUD CREAR CAMPAÑA //
+///////////////////////
+
+async function alta_crear_campanya(id, descripcionCorta, descripcionLarga, plantilla, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user:database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a ls DB
+
+    try {
+
+        let sql = `INSERT INTO plantillas_correo (id, descripcion_corta, descripcion_larga, plantilla) VALUES ('${id}','${descripcionCorta}', '${descripcionLarga}', '${plantilla}')`
+        await query(sql)
+
+        message = 'Se ha realizado la operacion con exito'
+        success = true
+
+    } catch(err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        conexion.end()
+
+        callback({'success':`${success}`, 'message':`${message}`, 'id':`${id}`, 'descripcion_corta':`${descripcionCorta}`, 'descripcion_larga':`${descripcionLarga}`, 'plantilla':`${plantilla}`})
+        
+    }
+}
+
+async function actualizar_campanya(id, descripcionCorta, descripcionLarga, plantilla, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user:database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a ls DB
+
+    try {
+
+        let sql = `UPDATE plantillas_correo SET id = '${id}', descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}' `
+        result = await query(sql)
+
+        message = 'Actualizado con exito'
+        success = true
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+
+    } finally {
+
+        callback({'success':`${success}`, 'message':`${message}`, 'id':`${id}`, 'descripcion_corta':`${descripcionCorta}`, 'descripcion_larga':`${descripcionLarga}`, 'plantilla':`${plantilla}`})
+
+    }    
+
+}
+
+async function mostrar_campanya(id,descripcionCorta, descripcionLarga, plantilla, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user:database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a ls DB
+
+    try {
+
+        let sql = `SELECT * plantillas_correo WHERE id = '${id}', descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}'`
+        console.log(sql);
+        result = await query(sql)
+
+        
+        console.log(result);
+
+        if (result.length == 0) {
+
+            message = 'El formulario esta vacio'
+            resultado = result
+        
+        } else {
+
+            message = 'El formulario esta completo'
+            success = true
+
+            resultado = result
+            console.log(resultado);
+        }
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+        resultado = null
+
+    } finally {
+
+        conexion.end()
+        
+        callback(resultado)
+        
+    }
+    
+}
+
+async function eliminar_campanya(id, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user: database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)          // Conexion a la DB
+
+    try {
+
+        let sql = `SELECT * FROM plantillas_correo WHERE id = '${id}'`
+        let result = await query(sql)        
+
+        if (result.length == 0) {
+
+            message = 'No se ha podido eliminar'
+            success = false 
+
+        } else {
+
+            sql = `DELETE FROM plantillas_correo WHERE id = '${id}'`
+            result = await query(sql)
+
+            message = 'Eliminado con exito'
+            success = true
+
+        } 
 
     } catch (err) {
 
@@ -501,12 +673,10 @@ async function mostrar_config_email(id_usuarios, callback) {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`})
-        
-    }
-    
-}
+        callback({'success':`${success}`, 'message':`${message}`, 'email':`${id}`})
 
+    }
+}
 
 module.exports = {
     'altaUsuario' : altaUsuario,
@@ -519,5 +689,9 @@ module.exports = {
     'eliminar' : eliminar,
     'alta_config_email' : alta_config_email,
     'actualizar_config_email' : actualizar_config_email,
-    'mostrar_config_email' : mostrar_config_email
+    'mostrar_config_email' : mostrar_config_email,
+    'alta_crear_campanya' : alta_crear_campanya,
+    'actualizar_campanya' : actualizar_campanya,
+    'mostrar_campanya' : mostrar_campanya,
+    'eliminar_campanya' : eliminar_campanya
 }

@@ -176,6 +176,10 @@ app.post('/eliminar', function(req, res, next){
 
 app.post('/alta_config_email', function(req, res, next){
 
+  // Controlar la sesion
+  if( req.session == null){
+    return res.status(400)}
+
   var hostConfig = req.body.hostConfig
   var portConfig = req.body.portConfig
   var emailConfig = req.body.emailConfig
@@ -225,6 +229,8 @@ app.post('/mostrar_config_email', function(req, res, next){
   let session = req.session
   var id_usuarios = session.user_id
 
+  console.log("Id_usuarios app: ", id_usuarios);
+
   crudPromesas.mostrar_config_email(id_usuarios, function(test){
   
     console.log(JSON.stringify(test));
@@ -232,6 +238,76 @@ app.post('/mostrar_config_email', function(req, res, next){
   })
 
 })
+
+/////////////////////////////////
+// RUTAS + CRUD CREAR CAMPAÑA //
+///////////////////////////////
+
+// --- ALTA CAMPAÑA ---
+
+app.post('/alta_crear_campanya', function(req, res, next){
+
+  var id = req.body.id
+  var descripcionCorta = req.body.descripcionCorta
+  var descripcionLarga = req.body.descripcionLarga
+  var plantilla = req.body.plantilla
+  
+  crudPromesas.alta_crear_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
+// --- ACTUALIZAR CAMPAÑA ---
+
+app.post('/actualizar_campanya', function(req, res, next){
+
+  var id = req.body.id
+  var descripcionCorta = req.body.descripcionCorta
+  var descripcionLarga = req.body.descripcionLarga
+  var plantilla = req.body.plantilla
+  
+  crudPromesas.actualizar_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
+// --- MOSTRAR CAMPAÑA ---
+
+app.post('/mostrar_campanya', function(req, res, next){
+  
+  var id = req.body.id
+  var descripcionCorta = req.body.descripcionCorta
+  var descripcionLarga = req.body.descripcionLarga
+  var plantilla = req.body.plantilla
+  
+  crudPromesas.mostrar_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
+// --- ELIMINAR CAMPAÑA ---
+
+app.post('/eliminar_campanya', function(req, res, next){
+  
+  var id = req.body.id
+  
+  crudPromesas.eliminar_campanya(id, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+})
+
 
 /////////////
 // SESION //
