@@ -281,12 +281,12 @@ app.post('/actualizar_campanya', function(req, res, next){
 
 app.post('/mostrar_campanya', function(req, res, next){
   
-  var id = req.body.id
-  var descripcionCorta = req.body.descripcionCorta
-  var descripcionLarga = req.body.descripcionLarga
-  var plantilla = req.body.plantilla
+  req.body.id
+  req.body.descripcionCorta
+  req.body.descripcionLarga
+  req.body.plantilla
   
-  crudPromesas.mostrar_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test){
+  crudPromesas.mostrar_campanya(function(test){
     
     console.log(JSON.stringify(test));
     return  res.status(200).json(test)

@@ -8,7 +8,6 @@ jQuery.ajax({
     console.log('Response:' , response);
     
     for(i=0; i < response.length; i++) {
-        
         // Creo la fila
         var fila = document.createElement('tr')
         fila.scope = 'row'

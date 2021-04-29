@@ -8,7 +8,43 @@
 
   </head>
   <body>
-
+    
+    <button class="btn btn-editar me-md-2 " type="button" data-bs-toggle="modal" data-bs-target="#modal_editar" data-id= '+response[i].id+' data-titulo='+response[i].descripcion_corta+' data-subtitulo='+response[i].descripcion_larga+' data-plantilla='+response[i].plantilla+'>
+      <i class="bi bi-pencil"></i>
+    </button>
+    <div class="modal fade" id="modal_editar" tabindex="-1" aria-labelledby="editar" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/actualizar_campanya" method="POST">
+              <h2>Editar campaña</h2>
+              <div class="col-auto">
+                <label class="form-label" for="inputID">Id</label>
+              </div>
+              <div class="mb-3">
+                <input type="string" class="form-control" id="id" for="inputID">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Titulo</label>
+                <input type="string" class="form-control" id="titulo">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Subtitulo</label>
+                <input type="string" class="form-control" id="subtitulo">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Plantilla</label>
+                <input type="string" class="form-control" id="plantilla">
+              </div>
+              <br>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-editar">Editar</button>
+              </div></form></div></div></div>
+    </div>
       
   </body>
 </html>

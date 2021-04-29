@@ -564,11 +564,23 @@ async function actualizar_campanya(id, descripcionCorta, descripcionLarga, plant
 
     try {
 
-        let sql = `UPDATE plantillas_correo SET id = '${id}', descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}' `
-        result = await query(sql)
+        let sql = `SELECT * FROM plantillas_correo WHERE id = '${id}'`         // SQL (Buscara si existe el email que introducen)
+        let result = await query(sql)
 
-        message = 'Actualizado con exito'
-        success = true
+        if (result.length == 0) {
+
+            message = 'El usaurio no existe'
+            success = false
+        
+        } else {
+        
+            sql = `UPDATE plantillas_correo SET descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}' `
+            result = await query(sql)
+
+            message = 'Actualizado con exito'
+            success = true
+
+        } 
 
     } catch (err) {
 
@@ -583,7 +595,7 @@ async function actualizar_campanya(id, descripcionCorta, descripcionLarga, plant
 
 }
 
-async function mostrar_campanya(id,descripcionCorta, descripcionLarga, plantilla, callback) {
+async function mostrar_campanya(callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -592,11 +604,11 @@ async function mostrar_campanya(id,descripcionCorta, descripcionLarga, plantilla
         password: database_password
     })
 
-    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a ls DB
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a la DB
 
     try {
 
-        let sql = `SELECT * plantillas_correo WHERE id = '${id}', descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}'`
+        let sql = `SELECT * FROM plantillas_correo`
         console.log(sql);
         result = await query(sql)
 
