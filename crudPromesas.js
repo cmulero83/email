@@ -694,7 +694,7 @@ async function eliminar_campanya(id, callback) {
 // ENVIO DE CAMPAÑAS //
 //////////////////////
 
-async function mostrar_envio_campanya(id_usuarios, id_campanya, callback) {
+async function mostrar_envio_campanya(id_usuarios, id, callback) {
 
     const conexion = mysql.createConnection({
         host: HOST,
@@ -707,7 +707,7 @@ async function mostrar_envio_campanya(id_usuarios, id_campanya, callback) {
 
     try {
 
-        let sql = `SELECT * FROM envio_campanya WHERE id_usuarios = '${id_usuarios}' AND id_campanya = '${id_campanya}'`
+        let sql = `SELECT * FROM envio_campanya WHERE id_usuarios = '${id_usuarios}' AND id_campanya = '${id}'`
         result = await query(sql)
 
         if (result.length == 0) {
@@ -717,7 +717,7 @@ async function mostrar_envio_campanya(id_usuarios, id_campanya, callback) {
         
         } else {
 
-            sql = `INSERT INTO envio_campanya (id_usuarios, id_campanya) VALUES ('${id_usuarios}', '${id_campanya}')`
+            sql = `INSERT INTO envio_campanya (id_usuarios, id_campanya) VALUES ('${id_usuarios}', '${id}')`
 
             message = 'El formulario esta completo'
             success = true

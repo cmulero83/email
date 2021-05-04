@@ -61,14 +61,10 @@ jQuery.ajax({
 
 function seleccionar_campanya (id_campanya) {
 
-    console.log("HOla", id_campanya);
-
     const Url = 'http://localhost:3000/mostrar_envio_campanya'
     const data = {
         "id" : `${id_campanya}`
     }
-
-    console.log("DATA", data);
 
     $.post(Url, data, function(data, status) {
         console.log("Data 2", data);
