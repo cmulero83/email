@@ -262,18 +262,17 @@ app.post('/alta_crear_campanya', function(req, res, next){
 
 // --- ACTUALIZAR CAMPAÑA ---
 
-app.post('/actualizar_campanya', function(req, res, next){
+app.post('/actualizar_campanya', function(req, res, next) {
 
   var id = req.body.id
   var descripcionCorta = req.body.descripcionCorta
   var descripcionLarga = req.body.descripcionLarga
   var plantilla = req.body.plantilla
-  
-  crudPromesas.actualizar_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test){
-    
-    console.log(JSON.stringify(test));
-    return  res.status(200).json(test)
 
+  crudPromesas.actualizar_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test) {
+
+    console.log(JSON.stringify(test));
+    return res.status(200).json(test)
   })
 })
 
@@ -308,6 +307,26 @@ app.post('/eliminar_campanya', function(req, res, next){
   })
 })
 
+////////////////////////
+// ENVIO DE CAMPAÑAS //
+//////////////////////
+
+app.post('/mostrar_envio_campanya', function(req, res, next){
+  
+  let session = req.session
+  var id_usuarios = session.user_id
+
+  let id_campanya = req.body.id
+  console.log(id_campanya);
+  
+  crudPromesas.mostrar_envio_campanya(id_usuarios, id_campanya, function(test){
+    
+    console.log(JSON.stringify(test));
+    return  res.status(200).json(test)
+
+  })
+  
+})
 
 /////////////
 // SESION //

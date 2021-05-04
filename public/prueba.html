@@ -12,12 +12,11 @@
 
     <script>
         $(document).ready(function(){
-            $.getScript("./crearCampanya.js")
+            $.getScript("./prueba.js")
         })   
     </script>
-    
-    <title>Crear campaña</title>
 
+    <title>Document</title>
 </head>
 <body>
 
@@ -46,15 +45,15 @@
                                   <label class="form-label" for="inputPassword6">Id</label>
                                 </div>
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="id" for="inputPassword6">
+                                    <input type="text" class="form-control" id="id"  name="id" for="inputPassword6">
                                 </div>
                                 <div class="mb-3">
                                   <label class="form-label">Titulo</label>
-                                  <input type="text" class="form-control" id="descripcionCorta">
+                                  <input type="text" class="form-control" id="descripcionCorta" name="descripcionCorta">
                                 </div>
                                 <div class="mb-3">
                                   <label class="form-label">Subtitulo</label>
-                                  <input type="text" class="form-control" id="descripcionLarga">
+                                  <input type="text" class="form-control" id="descripcionLarga" name="descripcionLarga">
                                 </div>
                                 <div class="mb-3">
                                   <label class="form-label">Plantilla</label>
@@ -63,7 +62,7 @@
                                 <br>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <input type="button" class="agregado" id="btn-agregar-nueva-campanya" value="Agregar">
+                                    <input type="button" class="agregado" id="btn-campanya" value="Agregar">
                                 </div>
                             </form>
                         </div>
@@ -73,7 +72,7 @@
 
             <!-- MODAL -->
       
-            <div class="modal" tabindex="-1" id="modal_nueva_campanya">
+            <div class="modal" tabindex="-1" id="modal_campanya">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -83,7 +82,7 @@
                           <p type=text class="parrafo_mensaje"></p>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn_modal_nueva_campanya">Cerrar</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn_modal_campanya">Cerrar</button>
                         </div>
                     </div>
                 </div>
@@ -107,6 +106,6 @@
         </table>
 
     </section>
-
+    
 </body>
 </html>

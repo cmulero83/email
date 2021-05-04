@@ -70,6 +70,7 @@ jQuery.ajax({
         modal.find('.modal-body #oculto_email').val(email)
         
     })
+    
     $('#eliminar').click(function(){
         eliminar($('#oculto_email').val())
     })
@@ -87,7 +88,6 @@ function eliminar (correo) {
     }
 
     console.log(data);
-    console.log(correo);
 
     $.post(Url, data, function(data, status) {
         console.log(data);

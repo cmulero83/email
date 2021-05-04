@@ -569,12 +569,12 @@ async function actualizar_campanya(id, descripcionCorta, descripcionLarga, plant
 
         if (result.length == 0) {
 
-            message = 'El usaurio no existe'
+            message = 'El usuario no existe'
             success = false
         
         } else {
         
-            sql = `UPDATE plantillas_correo SET descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}' `
+            sql = `UPDATE plantillas_correo SET descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}' WHERE id = '${id}'`
             result = await query(sql)
 
             message = 'Actualizado con exito'
@@ -591,8 +591,7 @@ async function actualizar_campanya(id, descripcionCorta, descripcionLarga, plant
 
         callback({'success':`${success}`, 'message':`${message}`, 'id':`${id}`, 'descripcion_corta':`${descripcionCorta}`, 'descripcion_larga':`${descripcionLarga}`, 'plantilla':`${plantilla}`})
 
-    }    
-
+    }
 }
 
 async function mostrar_campanya(callback) {
@@ -685,9 +684,62 @@ async function eliminar_campanya(id, callback) {
 
         conexion.end()
 
-        callback({'success':`${success}`, 'message':`${message}`, 'email':`${id}`})
+        callback({'success':`${success}`, 'message':`${message}`, 'id':`${id}`})
 
     }
+}
+
+
+////////////////////////
+// ENVIO DE CAMPAÑAS //
+//////////////////////
+
+async function mostrar_envio_campanya(id_usuarios, id_campanya, callback) {
+
+    const conexion = mysql.createConnection({
+        host: HOST,
+        database: database_name,
+        user:database_user,
+        password: database_password
+    })
+
+    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a la DB
+
+    try {
+
+        let sql = `SELECT * FROM envio_campanya WHERE id_usuarios = '${id_usuarios}' AND id_campanya = '${id_campanya}'`
+        result = await query(sql)
+
+        if (result.length == 0) {
+
+            message = 'El formulario esta vacio'
+            resultado = result
+        
+        } else {
+
+            sql = `INSERT INTO envio_campanya (id_usuarios, id_campanya) VALUES ('${id_usuarios}', '${id_campanya}')`
+
+            message = 'El formulario esta completo'
+            success = true
+
+            resultado = result
+            console.log(resultado);
+        }
+
+    } catch (err) {
+
+        message = err.sqlMessage
+        success = false
+        resultado = null
+
+    } finally {
+
+        conexion.end()
+        
+        callback(resultado)
+        
+    }
+    
 }
 
 module.exports = {
@@ -705,5 +757,6 @@ module.exports = {
     'alta_crear_campanya' : alta_crear_campanya,
     'actualizar_campanya' : actualizar_campanya,
     'mostrar_campanya' : mostrar_campanya,
-    'eliminar_campanya' : eliminar_campanya
+    'eliminar_campanya' : eliminar_campanya,
+    'mostrar_envio_campanya': mostrar_envio_campanya
 }
