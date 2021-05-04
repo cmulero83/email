@@ -23,6 +23,13 @@ h5{
     padding: 0px 0px 25px 0px;
 }
 
+h1{
+    color: black;
+    text-align: center;
+    padding: 10px 0px 20px 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .ajuste{
     font-size: 30px;
     color: #626567;

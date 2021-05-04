@@ -7,8 +7,8 @@
 // Descripcion: Activacion de los botones de la pagina
 ///////////////////////////////////////////
 
-$('#btn-agregar-usuario').click(function(e) {
-    agregar_usuario_db(e)
+$('#btn-agregar-usuario').click(function() {
+    agregar_usuario_db()
 })
 
 ////////////////////////////////
@@ -21,12 +21,17 @@ $('#btn-agregar-usuario').click(function(e) {
 // Descripcion: Es llamada desde el formulario de alta de nuevos usuarios.
 ///////////////////////////////////////////
 
-function agregar_usuario_db(e) {
+function agregar_usuario_db() {
+
+    //Cerramos el modal
+    $('#agregar').modal("toggle")
+
     let id = $("#id").val()
     let nombre = $("#nombre").val()
     let apellido = $("#apellido").val()
     let email = $("#email").val()
     let pais = $("#pais").val()
+
     const data = {
         "id":`${id}`,
         "nombre":`${nombre}`,

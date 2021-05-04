@@ -11,8 +11,11 @@ let editar = null  // Esta variable seria true si tengo que editar o false si te
 
 $('#btn_enviar_configuracion_email').click(function() {
 
-    if (editar == true){ editar_configuracion_email()}
-    else{alta_configuracion_email()}
+    if (editar == true){ 
+        editar_configuracion_email()
+    }else{
+        alta_configuracion_email()
+    }
 
 })
 
@@ -150,7 +153,7 @@ function editar_configuracion_email() {
     }).then(function(response) {
         console.log('Editar', response);
 
-        if(response.success == "false") {
+        if(response.success == "true") {
             
             // Levantamos el modal
             $('#modal_configuracion_email').modal('show')

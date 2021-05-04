@@ -566,6 +566,7 @@ async function actualizar_campanya(id, descripcionCorta, descripcionLarga, plant
 
         let sql = `SELECT * FROM plantillas_correo WHERE id = '${id}'`         // SQL (Buscara si existe el email que introducen)
         let result = await query(sql)
+        console.log(id);
 
         if (result.length == 0) {
 
@@ -695,7 +696,7 @@ async function eliminar_campanya(id, callback) {
 //////////////////////
 
 async function mostrar_envio_campanya(id_usuarios, id, callback) {
-
+    
     const conexion = mysql.createConnection({
         host: HOST,
         database: database_name,
@@ -703,43 +704,27 @@ async function mostrar_envio_campanya(id_usuarios, id, callback) {
         password: database_password
     })
 
-    const query = util.promisify(conexion.query).bind(conexion)         // Conexion a la DB
+    const query = util.promisify(conexion.query).bind(conexion) 
 
     try {
 
-        let sql = `SELECT * FROM envio_campanya WHERE id_usuarios = '${id_usuarios}' AND id_campanya = '${id}'`
+        sql = `INSERT INTO envio_campanya (id_usuarios, id_campanya) VALUES ('${id_usuarios}', '${id}')`
         result = await query(sql)
 
-        if (result.length == 0) {
-
-            message = 'El formulario esta vacio'
-            resultado = result
-        
-        } else {
-
-            sql = `INSERT INTO envio_campanya (id_usuarios, id_campanya) VALUES ('${id_usuarios}', '${id}')`
-
-            message = 'El formulario esta completo'
-            success = true
-
-            resultado = result
-            console.log(resultado);
-        }
+        message = 'Campaña agregada'
+        success = true
 
     } catch (err) {
 
         message = err.sqlMessage
         success = false
-        resultado = null
 
     } finally {
 
         conexion.end()
-        
-        callback(resultado)
-        
+
+        callback({'success': `${success}`, 'message':`${message}`, 'id_usuarios':`${id_usuarios}`, 'id_campya':`${id}`})
     }
-    
 }
 
 module.exports = {
