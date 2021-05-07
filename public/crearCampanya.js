@@ -110,7 +110,9 @@ function editar_campanya() {
     $('#modal_editar').modal("toggle")
    
     let id = $("#id").val()
+    console.log('id 115', id);
     let descripcionCorta = $("#titulo").val()
+    console.log('Descripcion corta LIN 117', descripcionCorta);
     let descripcionLarga = $("#subtitulo").val()
     let plantilla = $("#plantilla").val()
 
@@ -141,7 +143,7 @@ function editar_campanya() {
             $('#modal_campanya').find('.modal-body p').text(mensaje)
             // Ponemos el boton a la escucha
             $('#btn_modal_campanya').click(function() {
-                $(location).attr("href", "./crearCampanya")
+                $(location).attr("href", "./crearCampanya.html")
             })
 
         

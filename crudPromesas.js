@@ -4,7 +4,6 @@ const util = require('util')
 
 const makeid = require('./utilidades/util')
 const nodemail = require('./nodemail')
-const { response } = require('express')
 
 // Conectamos a la DB y defenimos los valores
 
@@ -577,6 +576,7 @@ async function actualizar_campanya(id, descripcionCorta, descripcionLarga, plant
         
             sql = `UPDATE plantillas_correo SET descripcion_corta = '${descripcionCorta}', descripcion_larga = '${descripcionLarga}', plantilla = '${plantilla}' WHERE id = '${id}'`
             result = await query(sql)
+            console.log(sql);
 
             message = 'Actualizado con exito'
             success = true
@@ -714,6 +714,8 @@ async function mostrar_envio_campanya(id_usuarios, id, callback) {
         message = 'Campaña agregada'
         success = true
 
+        
+
     } catch (err) {
 
         message = err.sqlMessage
@@ -723,7 +725,7 @@ async function mostrar_envio_campanya(id_usuarios, id, callback) {
 
         conexion.end()
 
-        callback({'success': `${success}`, 'message':`${message}`, 'id_usuarios':`${id_usuarios}`, 'id_campya':`${id}`})
+        callback({'success': `${success}`, 'message':`${message}`, 'id_usuarios':`${id_usuarios}`, 'id_campaya':`${id}`})
     }
 }
 

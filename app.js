@@ -265,6 +265,7 @@ app.post('/alta_crear_campanya', function(req, res, next){
 app.post('/actualizar_campanya', function(req, res, next) {
 
   var id = req.body.id
+  console.log("APP 268", id);
   var descripcionCorta = req.body.descripcionCorta
   var descripcionLarga = req.body.descripcionLarga
   var plantilla = req.body.plantilla

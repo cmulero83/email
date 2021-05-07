@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
     <link href="/css/styles.css" rel="stylesheet">
 
+    <link rel="icon" href="./img/favicon.png">
+
     <script>
         // Se ejecuta cuando la pagina se termina de cargar y luego ejecuta los scripts
         $(document).ready(function(){       
@@ -20,7 +22,7 @@
         
     </script>
 
-    <title>Correos</title>
+    <title>Configuracion SMPT</title>
 
 </head>
 <body>
@@ -63,7 +65,10 @@
                 <label for="PasswordConfig" class="form-label">Password</label>
                 <input type="password" class="form-control datoInput" name="passwordConfig" id="passwordConfig">
             </div>
-            <button type="button" class="btn" id="btn_enviar_configuracion_email">Actualizar</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <button type="button" class="btn" id="btn_enviar_configuracion_email">Actualizar</button>
+            </div>
+            
         </form>
         
         <!-- MODAL -->
