@@ -532,7 +532,7 @@ async function alta_crear_campanya(id, descripcionCorta, descripcionLarga, plant
 
         let sql = `INSERT INTO plantillas_correo (id, descripcion_corta, descripcion_larga, plantilla) VALUES ('${id}','${descripcionCorta}', '${descripcionLarga}', '${plantilla}')`
         await query(sql)
-
+        console.log(sql);
         message = 'Se ha realizado la operacion con exito'
         success = true
 

@@ -56,11 +56,11 @@ async function main() {
 
                 // Aqui llamos a la funcion para quenos traiga los correos a los que ahi que enviarles la campaña
 
-                let correos = await devuelve_envio_correos(result[n].id_usuarios)
+                let correos = await devuelve_envio_correos(result[n].id_usuarios, result[n].id_campanya)
                
 
                 // Iniciamos el envio de correo
-                await envio_correo(datos_confi, plantilla, correos)
+                await envio_correo(datos_confi, plantilla, correos, result[n].id_campanya)
 
             }
 
@@ -115,14 +115,16 @@ async function devuelve_plantilla_campanya(id_campanya, callback) {
 // Esta funcion nos devuelve los contacto del usuario a los que ahi que enviarles el correo de la campaña
 // Esta funcion devolvera 10 contactos a los que no se les halla enviado ya la plantilla
 
-async function devuelve_envio_correos(id_usuarios) {
+async function devuelve_envio_correos(id_usuarios, id_campanya) {
 
     try {
 
         const query = util.promisify(conexion.query).bind(conexion)
 
-        sql = `SELECT * FROM correos_aleatorios WHERE id_usuarios = '${id_usuarios}' LIMIT 10`
+        //sql = `SELECT * FROM correos_aleatorios WHERE id_usuarios = '${id_usuarios}' LIMIT 10`
+        sql = `SELECT * FROM correos_aleatorios WHERE id_usuarios = '${id_usuarios}' AND NOT EXISTS (SELECT * FROM log_envio_correo WHERE correos_aleatorios.email = log_envio_correo.email AND log_envio_correo.id_campanya = '${id_campanya}') LIMIT 10`
         result = await query(sql)
+        
         return result 
 
     }catch (err) {
@@ -153,14 +155,9 @@ async function devolucion_datos_smpt (id_usuarios) {
 
 // Aqui vamos a enviar el correo
 
-async function envio_correo(data_conexion, plantilla, correo) {
+async function envio_correo(data_conexion, plantilla, correo, id_campanya) {
 
     try {
-
-        console.log("Data conexion", data_conexion);
-        console.log("plantilla", plantilla);
-        console.log("emial", correo);
-        console.log("data host", data_conexion[0].host);
 
         let jConfig = {
             "host":`${data_conexion[0].host}`,
@@ -199,10 +196,14 @@ async function envio_correo(data_conexion, plantilla, correo) {
 
                     console.log("Correo enviado con exito");
 
+
                 }
 
                 createTransport.close()
             })
+
+
+            actualizar_bd_log_envio_correo(correo[i].id, correo[i].email, id_campanya)
         }
 
     }catch (err) {
@@ -210,3 +211,30 @@ async function envio_correo(data_conexion, plantilla, correo) {
         console.log(err);
     }
 }
+
+
+// Aqui llamamos a la funcion que va actualizar la DB
+
+function actualizar_bd_log_envio_correo (id_usuario_email, id_campanya, email_usuario) {
+
+    const timeElapsed = Date.now()
+    const today = new Date(timeElapsed)
+
+    sql = ` INSERT INTO log_envio_correo (id_correo, id_campanya, email, fecha_hora) VALUES ('${id_usuario_email}',  '${email_usuario}' ,'${id_campanya}', '${today.toISOString()}')`
+    
+    conexion.query(sql, function(err, result) {
+
+        if(!err){
+
+            console.log('Agregado correctamente los usuarios a la BD');
+
+        }else{
+
+            console.log(err);
+        }
+
+    })
+
+}
+
+
