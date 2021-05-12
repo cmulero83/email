@@ -530,6 +530,8 @@ async function alta_crear_campanya(id, descripcionCorta, descripcionLarga, plant
 
     try {
 
+        plantilla = escape(plantilla)
+
         let sql = `INSERT INTO plantillas_correo (id, descripcion_corta, descripcion_larga, plantilla) VALUES ('${id}','${descripcionCorta}', '${descripcionLarga}', '${plantilla}')`
         await query(sql)
         console.log(sql);

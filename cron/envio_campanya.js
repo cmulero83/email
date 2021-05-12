@@ -15,6 +15,9 @@ let database_name = 'mailshi1_alba'
 let database_user = 'mailshi1_cron'
 let database_password = 'cronusuario12'
 
+let DOMParser = require('xmldom').DOMParser;
+
+
 const conexion = mysql.createConnection({
     host: HOST,
     database: database_name,
@@ -34,7 +37,8 @@ async function main() {
         let result = await revisar_campanya()
         
 
-        console.log(result)
+        //console.log(result)
+        console.log('Numero de camapañas', result.length)
 
         // Si result != 0, es porque tenemos camapañas que procesar.....
         if (result.length != 0){
@@ -52,7 +56,14 @@ async function main() {
                 // Aqui llamamos a la funcion para traer la plantilla de la campaña 
 
                 let plantilla = await devuelve_plantilla_campanya(result[n].id_campanya)
-                
+
+                plantilla = plantilla[0]  // Leemos del Array que devuelve la primera posicion.
+                //console.log(plantilla.plantilla)
+                //plantilla = JSON.stringify(plantilla) // Pasamos el JSON a Texto
+
+
+                plantilla = new DOMParser().parseFromString(plantilla.plantilla, "text/html")
+                console.log(plantilla)
 
                 // Aqui llamos a la funcion para quenos traiga los correos a los que ahi que enviarles la campaña
 
@@ -176,11 +187,7 @@ async function envio_correo(data_conexion, plantilla, correo, id_campanya) {
                 from:`${data_conexion[0].send_mail}`,            // Remitente
                 to:`${correo[i].email}`,                                   // Destinatario
                 subject:"Pruebas de correo electronico",         // Asusto del correo
-                html:`
-                <div>
-                    <p>Esto es un prueba</p>
-                    <p>Enviendo correos electronicos con Nodemailer en NodeJS</p>
-                </div>`
+                html:`${plantilla}`
             }
 
             let createTransport = nodemailer.createTransport(jConfig)
