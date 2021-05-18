@@ -530,11 +530,21 @@ async function alta_crear_campanya(id, descripcionCorta, descripcionLarga, plant
 
     try {
 
-        plantilla = escape(plantilla)
+        // split() --> Divide el texto y crea un array
+        let str = plantilla.split("\n")
+        let porcentaje = str.length / 100
 
-        let sql = `INSERT INTO plantillas_correo (id, descripcion_corta, descripcion_larga, plantilla) VALUES ('${id}','${descripcionCorta}', '${descripcionLarga}', '${plantilla}')`
-        await query(sql)
-        console.log(sql);
+        for (n = 0; n < str.length; n++) {
+
+            let linea  = encodeURI(str[n].trim())
+
+            let sql = `INSERT INTO plantillas_correo (id, descripcion_corta, descripcion_larga, html_fila) VALUES ('${id}','${descripcionCorta}', '${descripcionLarga}', "'${linea}'")`
+            await query(sql)
+            console.log((n / str.length)/100)
+
+
+        }
+
         message = 'Se ha realizado la operacion con exito'
         success = true
 
@@ -610,7 +620,9 @@ async function mostrar_campanya(callback) {
 
     try {
 
-        let sql = `SELECT * FROM plantillas_correo`
+        // sql = `SELECT * FROM plantillas_correo`
+
+        let sql = `SELECT DISTINCT id, descripcion_corta, descripcion_larga FROM plantillas_correo`
         console.log(sql);
         result = await query(sql)
 

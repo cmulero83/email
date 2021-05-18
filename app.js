@@ -5,6 +5,7 @@ const morgan = require('morgan')
 
 const crudPromesas = require('./crudPromesas')
 const login = require('./login')
+const { restart } = require('nodemon')
 
 const app = express()   // Servidor expres
 const port = 3000
@@ -111,6 +112,14 @@ app.post('/alta', function(req, res, next){
   var id_usuarios = session.user_id
   console.log("Sesion en alta: "+ session.user_id);
 
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+
+  } else {
+    console.log("Sseion activa");
+  }
+
   crudPromesas.alta(id, email, nombre, apellido, pais, id_usuarios, function(test){
     
     console.log(JSON.stringify(test));
@@ -128,6 +137,18 @@ app.post('/actualizar', function(req, res, next){
   var email = req.body.email
   var pais = req.body.pais
 
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
+
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+
+  } else {
+    console.log("Sseion activa");
+  }
+
   crudPromesas.actualizar(nombre, apellido, email, pais, function(test){
     
     console.log(JSON.stringify(test));
@@ -142,7 +163,15 @@ app.post('/mostrar', function(req, res, next){
   
   let session = req.session
   var id_usuarios = session.user_id
-  console.log("Sesion en mostar : "+ session.user_id);
+  console.log("Sesion en alta: "+ session.user_id);
+
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+
+  } else {
+    console.log("Sseion activa");
+  }
 
   crudPromesas.mostrar(id_usuarios, function(test){
   
@@ -158,6 +187,18 @@ app.post('/eliminar', function(req, res, next){
       
   var email = req.body.email
   console.log(req.body.email);
+
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
+
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+
+  } else {
+    console.log("Sseion activa");
+  }
 
   crudPromesas.eliminar(email, function(test){
     
@@ -180,24 +221,33 @@ app.post('/alta_config_email', function(req, res, next){
   if( req.session == null){
     return res.status(400)}
 
-  var hostConfig = req.body.hostConfig
-  var portConfig = req.body.portConfig
-  var emailConfig = req.body.emailConfig
-  var smtpencrytionConfig = req.body.smtpencrytionConfig
-  var smptauthencationConfig = req.body.smptauthencationConfig
-  var usernameConfig = req.body.usernameConfig
-  var passwordConfig = req.body.passwordConfig
-  
-  let session = req.session
-  var id_usuarios = session.user_id
-
-  crudPromesas.alta_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig, id_usuarios, function(test){
+    var hostConfig = req.body.hostConfig
+    var portConfig = req.body.portConfig
+    var emailConfig = req.body.emailConfig
+    var smtpencrytionConfig = req.body.smtpencrytionConfig
+    var smptauthencationConfig = req.body.smptauthencationConfig
+    var usernameConfig = req.body.usernameConfig
+    var passwordConfig = req.body.passwordConfig
     
-    console.log(JSON.stringify(test));
+    let session = req.session
+    var id_usuarios = session.user_id
+    console.log("Sesion en alta: "+ session.user_id);
+
+    if (id_usuarios == null) {
+      console.log("Secion nula");
+      window.location.href = "http://localhost:3000";
+
+    } else {
+      console.log("Sseion activa");
+    }
+
+    crudPromesas.alta_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig, id_usuarios, function(test){
+
+      console.log(JSON.stringify(test));
     return  res.status(200).json(test)
 
   })
-})
+})  
 
 // --- ACTUALIZAR USUARIO ---
 
@@ -213,6 +263,15 @@ app.post('/actualizar_config_email', function(req, res, next){
 
   let session = req.session
   var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
+  
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+  
+  } else {
+    console.log("Sseion activa");
+  }
 
   crudPromesas.actualizar_config_email(hostConfig, portConfig, emailConfig, smtpencrytionConfig, smptauthencationConfig, usernameConfig, passwordConfig, id_usuarios, function(test){
     
@@ -228,8 +287,15 @@ app.post('/mostrar_config_email', function(req, res, next){
   
   let session = req.session
   var id_usuarios = session.user_id
-
-  console.log("Id_usuarios app: ", id_usuarios);
+  console.log("Sesion en alta: "+ session.user_id);
+  
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+  
+  } else {
+    console.log("Sseion activa");
+  }
 
   crudPromesas.mostrar_config_email(id_usuarios, function(test){
   
@@ -251,6 +317,18 @@ app.post('/alta_crear_campanya', function(req, res, next){
   var descripcionCorta = req.body.descripcionCorta
   var descripcionLarga = req.body.descripcionLarga
   var plantilla = req.body.plantilla
+
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
+  
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+  
+  } else {
+    console.log("Sseion activa");
+  }
   
   crudPromesas.alta_crear_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test){
     
@@ -265,10 +343,21 @@ app.post('/alta_crear_campanya', function(req, res, next){
 app.post('/actualizar_campanya', function(req, res, next) {
 
   var id = req.body.id
-  console.log("APP 268", id);
   var descripcionCorta = req.body.descripcionCorta
   var descripcionLarga = req.body.descripcionLarga
   var plantilla = req.body.plantilla
+
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
+  
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+  
+  } else {
+    console.log("Sseion activa");
+  }
 
   crudPromesas.actualizar_campanya(id, descripcionCorta, descripcionLarga, plantilla, function(test) {
 
@@ -285,6 +374,18 @@ app.post('/mostrar_campanya', function(req, res, next){
   req.body.descripcionCorta
   req.body.descripcionLarga
   req.body.plantilla
+
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
+  
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    return res.status(120).json({"err":"no ahi sesion"})
+  
+  } else {
+    console.log("Sseion activa");
+  }
   
   crudPromesas.mostrar_campanya(function(test){
     
@@ -299,6 +400,18 @@ app.post('/mostrar_campanya', function(req, res, next){
 app.post('/eliminar_campanya', function(req, res, next){
   
   var id = req.body.id
+
+  let session = req.session
+  var id_usuarios = session.user_id
+  console.log("Sesion en alta: "+ session.user_id);
+  
+  if (id_usuarios == null) {
+    console.log("Secion nula");
+    window.location.href = "http://localhost:3000";
+  
+  } else {
+    console.log("Sseion activa");
+  }
   
   crudPromesas.eliminar_campanya(id, function(test){
     
@@ -319,6 +432,16 @@ app.post('/mostrar_envio_campanya', function(req, res, next){
 
   let id_campanya = req.body.id
   console.log(id_campanya);
+
+  if (id_usuarios == null) {
+    
+    console.log("Secion nula");
+    return res.status(400).next()
+
+  } else {
+    
+    console.log("Sseion activa");
+  }
   
   crudPromesas.mostrar_envio_campanya(id_usuarios, id_campanya, function(test){
     

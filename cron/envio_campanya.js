@@ -15,9 +15,6 @@ let database_name = 'mailshi1_alba'
 let database_user = 'mailshi1_cron'
 let database_password = 'cronusuario12'
 
-let DOMParser = require('xmldom').DOMParser;
-
-
 const conexion = mysql.createConnection({
     host: HOST,
     database: database_name,
@@ -35,9 +32,6 @@ async function main() {
 
         // Reisar si tenemos alguna campaña que procesar...
         let result = await revisar_campanya()
-        
-
-        //console.log(result)
         console.log('Numero de camapañas', result.length)
 
         // Si result != 0, es porque tenemos camapañas que procesar.....
@@ -45,30 +39,18 @@ async function main() {
 
             // Vamos a realizar un bucle con las campañas....
             for (n=0; n < result.length; n++) {
-                console.log(n);
-                console.log(result[n].id_usuarios);
 
                 // Aqui traemos los datos de configuracion
 
                 let datos_confi = await devolucion_datos_smpt(result[n].id_usuarios)
-                
 
                 // Aqui llamamos a la funcion para traer la plantilla de la campaña 
 
                 let plantilla = await devuelve_plantilla_campanya(result[n].id_campanya)
 
-                plantilla = plantilla[0]  // Leemos del Array que devuelve la primera posicion.
-                //console.log(plantilla.plantilla)
-                //plantilla = JSON.stringify(plantilla) // Pasamos el JSON a Texto
-
-
-                plantilla = new DOMParser().parseFromString(plantilla.plantilla, "text/html")
-                console.log(plantilla)
-
                 // Aqui llamos a la funcion para quenos traiga los correos a los que ahi que enviarles la campaña
 
                 let correos = await devuelve_envio_correos(result[n].id_usuarios, result[n].id_campanya)
-               
 
                 // Iniciamos el envio de correo
                 await envio_correo(datos_confi, plantilla, correos, result[n].id_campanya)
@@ -98,21 +80,41 @@ async function revisar_campanya(callback) {
     let result = await query(sql)
     return result
 
- 
 }
 
 // Esta funcion trae la campaña
 
-async function devuelve_plantilla_campanya(id_campanya, callback) {
+async function devuelve_plantilla_campanya(id_campanya) {
+
+    let plantilla = ""
+    let linea_anadir = ""
 
     try{    
         
         const query = util.promisify(conexion.query).bind(conexion)
 
-        sql = `SELECT plantilla FROM plantillas_correo WHERE id = '${id_campanya}'`
+        sql = `SELECT html_fila FROM plantillas_correo WHERE id = '${id_campanya}'`
         let result = await query(sql)
-        return result
 
+        if (result.length == 0) {
+
+            message = 'Plantilla no encontrada'
+            resultado = null
+        
+        } else {
+
+            // Vamos a construir el mensajes
+
+            for (i = 0; i < result.length; i++) {
+                console.log("plantilla fila", result[i].html_fila);
+                linea_anadir = "\n" + decodeURI(result[i].html_fila)
+                linea_anadir = linea_anadir.slice(2, linea_anadir.length-1)
+                
+                plantilla = plantilla.concat(linea_anadir)
+            }
+        }
+
+        return plantilla
 
     }catch(err){
 
@@ -167,7 +169,8 @@ async function devolucion_datos_smpt (id_usuarios) {
 // Aqui vamos a enviar el correo
 
 async function envio_correo(data_conexion, plantilla, correo, id_campanya) {
-
+    console.log("data funcion", data_conexion);
+   //console.log("plantilla", plantilla);
     try {
 
         let jConfig = {
